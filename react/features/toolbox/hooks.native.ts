@@ -1,67 +1,96 @@
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
-import ChatButton from '../chat/components/native/ChatButton';
-import RaiseHandContainerButtons from '../reactions/components/native/RaiseHandContainerButtons';
-import TileViewButton from '../video-layout/components/TileViewButton';
-import { iAmVisitor } from '../visitors/functions';
+import RaiseHandContainerButtons from "../reactions/components/native/RaiseHandContainerButtons";
+import TileViewButton from "../video-layout/components/TileViewButton";
+import { iAmVisitor } from "../visitors/functions";
 
-import AudioMuteButton from './components/native/AudioMuteButton';
-import CustomOptionButton from './components/native/CustomOptionButton';
-import HangupContainerButtons from './components/native/HangupContainerButtons';
-import OverflowMenuButton from './components/native/OverflowMenuButton';
-import ScreenSharingButton from './components/native/ScreenSharingButton';
-import VideoMuteButton from './components/native/VideoMuteButton';
-import { isDesktopShareButtonDisabled } from './functions.native';
-import { ICustomToolbarButton, IToolboxNativeButton, NativeToolbarButton } from './types';
-
+import { IReduxState } from "../app/types";
+import SpeakerStatsButton from "../speaker-stats/components/native/SpeakerStatsButton";
+import AudioMuteButton from "./components/native/AudioMuteButton";
+import CustomOptionButton from "./components/native/CustomOptionButton";
+import HangupContainerButtons from "./components/native/HangupContainerButtons";
+import OverflowMenuButton from "./components/native/OverflowMenuButton";
+import ScreenSharingButton from "./components/native/ScreenSharingButton";
+import ToggleCameraButton from "./components/native/ToggleCameraButton";
+import VideoMuteButton from "./components/native/VideoMuteButton";
+import { isDesktopShareButtonDisabled } from "./functions.native";
+import { ICustomToolbarButton, IToolboxNativeButton, NativeToolbarButton } from "./types";
 
 const microphone = {
-    key: 'microphone',
+    key: "microphone",
     Content: AudioMuteButton,
-    group: 0
+    group: 0,
 };
 
 const camera = {
-    key: 'camera',
+    key: "camera",
     Content: VideoMuteButton,
-    group: 0
+    group: 0,
+};
+
+const toggleCamera = {
+    key: "toggle-camera",
+    Content: ToggleCameraButton,
+    group: 1,
+};
+
+const speaker = {
+    key: "stats",
+    Content: SpeakerStatsButton,
+    group: 1,
 };
 
 const chat = {
-    key: 'chat',
-    Content: ChatButton,
-    group: 1
+    key: "chat",
+    Content: ToggleCameraButton,
+    group: 1,
 };
 
 const screensharing = {
-    key: 'screensharing',
+    key: "screensharing",
     Content: ScreenSharingButton,
-    group: 1
+    group: 1,
 };
 
 const raisehand = {
-    key: 'raisehand',
+    key: "raisehand",
     Content: RaiseHandContainerButtons,
-    group: 2
+    group: 2,
 };
 
 const tileview = {
-    key: 'tileview',
+    key: "tileview",
     Content: TileViewButton,
-    group: 2
+    group: 2,
 };
 
 const overflowmenu = {
-    key: 'overflowmenu',
+    key: "overflowmenu",
     Content: OverflowMenuButton,
-    group: 3
+    group: 3,
 };
 
 const hangup = {
-    key: 'hangup',
+    key: "hangup",
     Content: HangupContainerButtons,
-    group: 3
+    group: 3,
 };
+
+function getToggleCameraButton() {
+    const _iAmVisitor = useSelector(iAmVisitor);
+
+    if (!_iAmVisitor) {
+        return toggleCamera;
+    }
+}
+
+function getSpeakerButton() {
+    const _iAmVisitor = useSelector(iAmVisitor);
+
+    if (!_iAmVisitor) {
+        return speaker;
+    }
+}
 
 /**
  * A hook that returns the audio mute button.
@@ -148,29 +177,60 @@ function getOverflowMenuButton() {
  * @param {Object} _customToolbarButtons - An array containing custom buttons objects.
  * @returns {Object} The button maps mainMenuButtons and overflowMenuButtons.
  */
-export function useNativeToolboxButtons(
-        _customToolbarButtons?: ICustomToolbarButton[]): { [key: string]: IToolboxNativeButton; } {
+export function useNativeToolboxButtons(_customToolbarButtons?: ICustomToolbarButton[]): {
+    [key: string]: IToolboxNativeButton;
+} {
+    const audioMuted = useSelector((state: IReduxState) => state["features/base/media"].audio.muted);
+    const videoMuted = useSelector((state: IReduxState) => state["features/base/media"].video.muted);
+
+    function getAudioMuteButton() {
+        const _iAmVisitor = useSelector(iAmVisitor);
+        const audioMuted = useSelector((state: IReduxState) => state["features/base/media"].audio.muted);
+
+        if (!_iAmVisitor) {
+            return {
+                ...microphone,
+                enabled: !audioMuted,
+            };
+        }
+    }
+
+    function getVideoMuteButton() {
+        const _iAmVisitor = useSelector(iAmVisitor);
+        const videoMuted = useSelector((state: IReduxState) => state["features/base/media"].video.muted);
+
+        if (!_iAmVisitor) {
+            return {
+                ...camera,
+                enabled: !videoMuted,
+            };
+        }
+    }
+
     const audioMuteButton = getAudioMuteButton();
     const videoMuteButton = getVideoMuteButton();
+    const toggleCamera = getToggleCameraButton();
+    const speaker = getSpeakerButton();
     const chatButton = getChatButton();
     const screenSharingButton = getScreenSharingButton();
     const tileViewButton = getTileViewButton();
     const overflowMenuButton = getOverflowMenuButton();
 
-    const buttons: { [key in NativeToolbarButton]?: IToolboxNativeButton; } = {
+    const buttons: { [key in NativeToolbarButton]?: IToolboxNativeButton } = {
         microphone: audioMuteButton,
         camera: videoMuteButton,
-        chat: chatButton,
+        // chat: chatButton,
+        "toggle-camera": toggleCamera,
+        speaker: speaker,
         screensharing: screenSharingButton,
-        raisehand,
-        tileview: tileViewButton,
-        overflowmenu: overflowMenuButton,
-        hangup
+        // raisehand,
+        // tileview: tileViewButton,
+        // overflowmenu: overflowMenuButton,
+        hangup,
     };
     const buttonKeys = Object.keys(buttons) as NativeToolbarButton[];
 
-    buttonKeys.forEach(
-        key => typeof buttons[key] === 'undefined' && delete buttons[key]);
+    buttonKeys.forEach((key) => typeof buttons[key] === "undefined" && delete buttons[key]);
 
     const customButtons = _customToolbarButtons?.reduce((prev, { backgroundColor, icon, id, text }) => {
         prev[id] = {
@@ -180,14 +240,14 @@ export function useNativeToolboxButtons(
             Content: CustomOptionButton,
             group: 4,
             icon,
-            text
+            text,
         };
 
         return prev;
-    }, {} as { [key: string]: ICustomToolbarButton; });
+    }, {} as { [key: string]: ICustomToolbarButton });
 
     return {
         ...buttons,
-        ...customButtons
+        ...customButtons,
     };
 }

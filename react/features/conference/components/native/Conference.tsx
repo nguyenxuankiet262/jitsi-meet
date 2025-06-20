@@ -1,67 +1,52 @@
-import { useFocusEffect } from '@react-navigation/native';
-import React, { useCallback } from 'react';
-import {
-    BackHandler,
-    NativeModules,
-    Platform,
-    SafeAreaView,
-    StatusBar,
-    View,
-    ViewStyle
-} from 'react-native';
-import { EdgeInsets, withSafeAreaInsets } from 'react-native-safe-area-context';
-import { connect, useDispatch } from 'react-redux';
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback } from "react";
+import { BackHandler, NativeModules, Platform, SafeAreaView, StatusBar, View, ViewStyle } from "react-native";
+import { EdgeInsets, withSafeAreaInsets } from "react-native-safe-area-context";
+import { connect, useDispatch } from "react-redux";
 
-import { appNavigate } from '../../../app/actions.native';
-import { IReduxState, IStore } from '../../../app/types';
-import { CONFERENCE_BLURRED, CONFERENCE_FOCUSED } from '../../../base/conference/actionTypes';
-import { FULLSCREEN_ENABLED } from '../../../base/flags/constants';
-import { getFeatureFlag } from '../../../base/flags/functions';
-import Container from '../../../base/react/components/native/Container';
-import LoadingIndicator from '../../../base/react/components/native/LoadingIndicator';
-import TintedView from '../../../base/react/components/native/TintedView';
-import {
-    ASPECT_RATIO_NARROW,
-    ASPECT_RATIO_WIDE
-} from '../../../base/responsive-ui/constants';
-import { StyleType } from '../../../base/styles/functions.any';
-import TestConnectionInfo from '../../../base/testing/components/TestConnectionInfo';
-import { isCalendarEnabled } from '../../../calendar-sync/functions.native';
-import DisplayNameLabel from '../../../display-name/components/native/DisplayNameLabel';
-import BrandingImageBackground from '../../../dynamic-branding/components/native/BrandingImageBackground';
-import Filmstrip from '../../../filmstrip/components/native/Filmstrip';
-import TileView from '../../../filmstrip/components/native/TileView';
-import { FILMSTRIP_SIZE } from '../../../filmstrip/constants';
-import { isFilmstripVisible } from '../../../filmstrip/functions.native';
-import CalleeInfoContainer from '../../../invite/components/callee-info/CalleeInfoContainer';
-import LargeVideo from '../../../large-video/components/LargeVideo.native';
-import { getIsLobbyVisible } from '../../../lobby/functions';
-import { navigate } from '../../../mobile/navigation/components/conference/ConferenceNavigationContainerRef';
-import { screen } from '../../../mobile/navigation/routes';
-import { isPipEnabled, setPictureInPictureEnabled } from '../../../mobile/picture-in-picture/functions';
-import Captions from '../../../subtitles/components/native/Captions';
-import { setToolboxVisible } from '../../../toolbox/actions.native';
-import Toolbox from '../../../toolbox/components/native/Toolbox';
-import { isToolboxVisible } from '../../../toolbox/functions.native';
-import {
-    AbstractConference,
-    abstractMapStateToProps
-} from '../AbstractConference';
-import type { AbstractProps } from '../AbstractConference';
-import { isConnecting } from '../functions.native';
+import { appNavigate } from "../../../app/actions.native";
+import { IReduxState, IStore } from "../../../app/types";
+import { CONFERENCE_BLURRED, CONFERENCE_FOCUSED } from "../../../base/conference/actionTypes";
+import { FULLSCREEN_ENABLED } from "../../../base/flags/constants";
+import { getFeatureFlag } from "../../../base/flags/functions";
+import Container from "../../../base/react/components/native/Container";
+import LoadingIndicator from "../../../base/react/components/native/LoadingIndicator";
+import TintedView from "../../../base/react/components/native/TintedView";
+import { ASPECT_RATIO_NARROW, ASPECT_RATIO_WIDE } from "../../../base/responsive-ui/constants";
+import { StyleType } from "../../../base/styles/functions.any";
+import TestConnectionInfo from "../../../base/testing/components/TestConnectionInfo";
+import { isCalendarEnabled } from "../../../calendar-sync/functions.native";
+import DisplayNameLabel from "../../../display-name/components/native/DisplayNameLabel";
+import BrandingImageBackground from "../../../dynamic-branding/components/native/BrandingImageBackground";
+import Filmstrip from "../../../filmstrip/components/native/Filmstrip";
+import TileView from "../../../filmstrip/components/native/TileView";
+import { FILMSTRIP_SIZE } from "../../../filmstrip/constants";
+import { isFilmstripVisible } from "../../../filmstrip/functions.native";
+import CalleeInfoContainer from "../../../invite/components/callee-info/CalleeInfoContainer";
+import LargeVideo from "../../../large-video/components/LargeVideo.native";
+import { getIsLobbyVisible } from "../../../lobby/functions";
+import { navigate } from "../../../mobile/navigation/components/conference/ConferenceNavigationContainerRef";
+import { screen } from "../../../mobile/navigation/routes";
+import { isPipEnabled, setPictureInPictureEnabled } from "../../../mobile/picture-in-picture/functions";
+import Captions from "../../../subtitles/components/native/Captions";
+import { setToolboxVisible } from "../../../toolbox/actions.native";
+import Toolbox from "../../../toolbox/components/native/Toolbox";
+import { isToolboxVisible } from "../../../toolbox/functions.native";
+import { AbstractConference, abstractMapStateToProps } from "../AbstractConference";
+import type { AbstractProps } from "../AbstractConference";
+import { isConnecting } from "../functions.native";
 
-import AlwaysOnLabels from './AlwaysOnLabels';
-import ExpandedLabelPopup from './ExpandedLabelPopup';
-import LonelyMeetingExperience from './LonelyMeetingExperience';
-import TitleBar from './TitleBar';
-import { EXPANDED_LABEL_TIMEOUT } from './constants';
-import styles from './styles';
+import AlwaysOnLabels from "./AlwaysOnLabels";
+import ExpandedLabelPopup from "./ExpandedLabelPopup";
+import LonelyMeetingExperience from "./LonelyMeetingExperience";
+import TitleBar from "./TitleBar";
+import { EXPANDED_LABEL_TIMEOUT } from "./constants";
+import styles from "./styles";
 
 /**
  * The type of the React {@code Component} props of {@link Conference}.
  */
 interface IProps extends AbstractProps {
-
     /**
      * Application's aspect ratio.
      */
@@ -144,11 +129,11 @@ interface IProps extends AbstractProps {
     /**
      * The redux {@code dispatch} function.
      */
-    dispatch: IStore['dispatch'];
+    dispatch: IStore["dispatch"];
 
     /**
-    * Object containing the safe area insets.
-    */
+     * Object containing the safe area insets.
+     */
     insets: EdgeInsets;
 
     /**
@@ -158,7 +143,6 @@ interface IProps extends AbstractProps {
 }
 
 type State = {
-
     /**
      * The label that is currently expanded.
      */
@@ -184,7 +168,7 @@ class Conference extends AbstractConference<IProps, State> {
         super(props);
 
         this.state = {
-            visibleExpandedLabel: undefined
+            visibleExpandedLabel: undefined,
         };
 
         this._expandedLabelTimeout = React.createRef<number>();
@@ -204,13 +188,9 @@ class Conference extends AbstractConference<IProps, State> {
      * @returns {void}
      */
     componentDidMount() {
-        const {
-            _audioOnlyEnabled,
-            _startCarMode,
-            navigation
-        } = this.props;
+        const { _audioOnlyEnabled, _startCarMode, navigation } = this.props;
 
-        BackHandler.addEventListener('hardwareBackPress', this._onHardwareBackPress);
+        BackHandler.addEventListener("hardwareBackPress", this._onHardwareBackPress);
 
         if (_audioOnlyEnabled && _startCarMode) {
             navigation.navigate(screen.conference.carmode);
@@ -223,11 +203,7 @@ class Conference extends AbstractConference<IProps, State> {
      * @inheritdoc
      */
     componentDidUpdate(prevProps: IProps) {
-        const {
-            _audioOnlyEnabled,
-            _showLobby,
-            _startCarMode
-        } = this.props;
+        const { _audioOnlyEnabled, _showLobby, _startCarMode } = this.props;
 
         if (!prevProps._showLobby && _showLobby) {
             navigate(screen.lobby.root);
@@ -252,7 +228,7 @@ class Conference extends AbstractConference<IProps, State> {
      */
     componentWillUnmount() {
         // Tear handling any hardware button presses for back navigation down.
-        BackHandler.removeEventListener('hardwareBackPress', this._onHardwareBackPress);
+        BackHandler.removeEventListener("hardwareBackPress", this._onHardwareBackPress);
 
         clearTimeout(this._expandedLabelTimeout.current ?? 0);
     }
@@ -264,26 +240,15 @@ class Conference extends AbstractConference<IProps, State> {
      * @returns {ReactElement}
      */
     render() {
-        const {
-            _brandingStyles,
-            _fullscreenEnabled
-        } = this.props;
+        const { _brandingStyles, _fullscreenEnabled } = this.props;
 
         return (
-            <Container
-                style = { [
-                    styles.conference,
-                    _brandingStyles
-                ] }>
+            <Container style={[styles.conference, _brandingStyles]}>
                 <BrandingImageBackground />
-                {
-                    Platform.OS === 'android'
-                    && <StatusBar
-                        barStyle = 'light-content'
-                        hidden = { _fullscreenEnabled }
-                        translucent = { _fullscreenEnabled } />
-                }
-                { this._renderContent() }
+                {Platform.OS === "android" && (
+                    <StatusBar barStyle="light-content" hidden={_fullscreenEnabled} translucent={_fullscreenEnabled} />
+                )}
+                {this._renderContent()}
             </Container>
         );
     }
@@ -313,7 +278,7 @@ class Conference extends AbstractConference<IProps, State> {
 
             p = PictureInPicture.enterPictureInPicture();
         } else {
-            p = Promise.reject(new Error('PiP not enabled'));
+            p = Promise.reject(new Error("PiP not enabled"));
         }
 
         p.catch(() => {
@@ -335,18 +300,17 @@ class Conference extends AbstractConference<IProps, State> {
         return () => {
             const { visibleExpandedLabel } = this.state;
 
-            const newVisibleExpandedLabel
-                = visibleExpandedLabel === label ? undefined : label;
+            const newVisibleExpandedLabel = visibleExpandedLabel === label ? undefined : label;
 
             clearTimeout(this._expandedLabelTimeout.current);
             this.setState({
-                visibleExpandedLabel: newVisibleExpandedLabel
+                visibleExpandedLabel: newVisibleExpandedLabel,
             });
 
             if (newVisibleExpandedLabel) {
                 this._expandedLabelTimeout.current = setTimeout(() => {
                     this.setState({
-                        visibleExpandedLabel: undefined
+                        visibleExpandedLabel: undefined,
                     });
                 }, EXPANDED_LABEL_TIMEOUT);
             }
@@ -367,7 +331,7 @@ class Conference extends AbstractConference<IProps, State> {
             _largeVideoParticipantId,
             _reducedUI,
             _shouldDisplayTileView,
-            _toolboxVisible
+            _toolboxVisible,
         } = this.props;
 
         let alwaysOnTitleBarStyles;
@@ -377,104 +341,101 @@ class Conference extends AbstractConference<IProps, State> {
         }
 
         if (_aspectRatio === ASPECT_RATIO_WIDE) {
-            alwaysOnTitleBarStyles
-                = !_shouldDisplayTileView && _filmstripVisible
-                    ? styles.alwaysOnTitleBarWide
-                    : styles.alwaysOnTitleBar;
+            alwaysOnTitleBarStyles =
+                !_shouldDisplayTileView && _filmstripVisible ? styles.alwaysOnTitleBarWide : styles.alwaysOnTitleBar;
         } else {
             alwaysOnTitleBarStyles = styles.alwaysOnTitleBar;
-
         }
 
         return (
             <>
-                {/*
-                  * The LargeVideo is the lowermost stacking layer.
-                  */
-                    _shouldDisplayTileView
-                        ? <TileView onClick = { this._onClick } />
-                        : <LargeVideo onClick = { this._onClick } />
+                {
+                    /*
+                     * The LargeVideo is the lowermost stacking layer.
+                     */
+                    _shouldDisplayTileView ? (
+                        <TileView onClick={this._onClick} />
+                    ) : (
+                        <LargeVideo onClick={this._onClick} />
+                    )
                 }
 
-                {/*
-                  * If there is a ringing call, show the callee's info.
-                  */
+                {
+                    /*
+                     * If there is a ringing call, show the callee's info.
+                     */
                     <CalleeInfoContainer />
                 }
 
-                {/*
-                  * The activity/loading indicator goes above everything, except
-                  * the toolbox/toolbars and the dialogs.
-                  */
-                    _connecting
-                        && <TintedView>
+                {
+                    /*
+                     * The activity/loading indicator goes above everything, except
+                     * the toolbox/toolbars and the dialogs.
+                     */
+                    _connecting && (
+                        <TintedView>
                             <LoadingIndicator />
                         </TintedView>
+                    )
                 }
 
-                <View
-                    pointerEvents = 'box-none'
-                    style = { styles.toolboxAndFilmstripContainer as ViewStyle }>
+                <View pointerEvents="box-none" style={styles.toolboxAndFilmstripContainer as ViewStyle}>
+                    <Captions onPress={this._onClick} />
 
-                    <Captions onPress = { this._onClick } />
+                    <Captions onPress={this._onClick} />
 
-                    {
-                        _shouldDisplayTileView
-                        || <Container style = { styles.displayNameContainer }>
-                            <DisplayNameLabel
-                                participantId = { _largeVideoParticipantId } />
+                    {_shouldDisplayTileView || (
+                        <Container style={styles.displayNameContainer}>
+                            <DisplayNameLabel participantId={_largeVideoParticipantId} />
                         </Container>
-                    }
+                    )}
 
-                    { !_shouldDisplayTileView && <LonelyMeetingExperience /> }
+                    {!_shouldDisplayTileView && <LonelyMeetingExperience />}
 
-                    {
-                        _shouldDisplayTileView
-                        || <>
+                    {_shouldDisplayTileView || (
+                        <>
                             <Filmstrip />
-                            { this._renderNotificationsContainer() }
+                            {this._renderNotificationsContainer()}
                             <Toolbox />
                         </>
-                    }
+                    )}
                 </View>
 
                 <SafeAreaView
-                    pointerEvents = 'box-none'
-                    style = {
+                    pointerEvents="box-none"
+                    style={
                         (_toolboxVisible
                             ? styles.titleBarSafeViewColor
-                            : styles.titleBarSafeViewTransparent) as ViewStyle }>
-                    <TitleBar _createOnPress = { this._createOnPress } />
+                            : styles.titleBarSafeViewTransparent) as ViewStyle
+                    }
+                >
+                    <TitleBar _createOnPress={this._createOnPress} />
                 </SafeAreaView>
                 <SafeAreaView
-                    pointerEvents = 'box-none'
-                    style = {
+                    pointerEvents="box-none"
+                    style={
                         (_toolboxVisible
-                            ? [ styles.titleBarSafeViewTransparent, { top: this.props.insets.top + 50 } ]
+                            ? [styles.titleBarSafeViewTransparent, { top: this.props.insets.top + 50 }]
                             : styles.titleBarSafeViewTransparent) as ViewStyle
-                    }>
-                    <View
-                        pointerEvents = 'box-none'
-                        style = { styles.expandedLabelWrapper }>
-                        <ExpandedLabelPopup visibleExpandedLabel = { this.state.visibleExpandedLabel } />
+                    }
+                >
+                    <View pointerEvents="box-none" style={styles.expandedLabelWrapper}>
+                        <ExpandedLabelPopup visibleExpandedLabel={this.state.visibleExpandedLabel} />
                     </View>
-                    <View
-                        pointerEvents = 'box-none'
-                        style = { alwaysOnTitleBarStyles as ViewStyle }>
+                    <View pointerEvents="box-none" style={alwaysOnTitleBarStyles as ViewStyle}>
                         {/* eslint-disable-next-line react/jsx-no-bind */}
-                        <AlwaysOnLabels createOnPress = { this._createOnPress } />
+                        <AlwaysOnLabels createOnPress={this._createOnPress} />
                     </View>
                 </SafeAreaView>
 
                 <TestConnectionInfo />
 
-                {
-                    _shouldDisplayTileView
-                    && <>
-                        { this._renderNotificationsContainer() }
+                {_shouldDisplayTileView && (
+                    <>
+                        {this._renderNotificationsContainer()}
                         <Toolbox />
                     </>
-                }
+                )}
             </>
         );
     }
@@ -490,14 +451,13 @@ class Conference extends AbstractConference<IProps, State> {
 
         return (
             <>
-                <LargeVideo onClick = { this._onClick } />
+                <LargeVideo onClick={this._onClick} />
 
-                {
-                    _connecting
-                        && <TintedView>
-                            <LoadingIndicator />
-                        </TintedView>
-                }
+                {_connecting && (
+                    <TintedView>
+                        <LoadingIndicator />
+                    </TintedView>
+                )}
             </>
         );
     }
@@ -528,13 +488,11 @@ class Conference extends AbstractConference<IProps, State> {
             notificationsStyle.marginRight = FILMSTRIP_SIZE;
         }
 
-        return super.renderNotificationsContainer(
-            {
-                shouldDisplayTileView: this.props._shouldDisplayTileView,
-                style: notificationsStyle,
-                toolboxVisible: this.props._toolboxVisible
-            }
-        );
+        return super.renderNotificationsContainer({
+            shouldDisplayTileView: this.props._shouldDisplayTileView,
+            style: notificationsStyle,
+            toolboxVisible: this.props._toolboxVisible,
+        });
     }
 
     /**
@@ -559,14 +517,16 @@ class Conference extends AbstractConference<IProps, State> {
  * @returns {IProps}
  */
 function _mapStateToProps(state: IReduxState, _ownProps: any) {
-    const { isOpen } = state['features/participants-pane'];
-    const { aspectRatio, reducedUI } = state['features/base/responsive-ui'];
-    const { backgroundColor } = state['features/dynamic-branding'];
-    const { startCarMode } = state['features/base/settings'];
-    const { enabled: audioOnlyEnabled } = state['features/base/audio-only'];
-    const brandingStyles = backgroundColor ? {
-        backgroundColor
-    } : undefined;
+    const { isOpen } = state["features/participants-pane"];
+    const { aspectRatio, reducedUI } = state["features/base/responsive-ui"];
+    const { backgroundColor } = state["features/dynamic-branding"];
+    const { startCarMode } = state["features/base/settings"];
+    const { enabled: audioOnlyEnabled } = state["features/base/audio-only"];
+    const brandingStyles = backgroundColor
+        ? {
+              backgroundColor,
+          }
+        : undefined;
 
     return {
         ...abstractMapStateToProps(state),
@@ -578,29 +538,34 @@ function _mapStateToProps(state: IReduxState, _ownProps: any) {
         _filmstripVisible: isFilmstripVisible(state),
         _fullscreenEnabled: getFeatureFlag(state, FULLSCREEN_ENABLED, true),
         _isParticipantsPaneOpen: isOpen,
-        _largeVideoParticipantId: state['features/large-video'].participantId,
+        _largeVideoParticipantId: state["features/large-video"].participantId,
         _pictureInPictureEnabled: isPipEnabled(state),
         _reducedUI: reducedUI,
         _showLobby: getIsLobbyVisible(state),
         _startCarMode: startCarMode,
-        _toolboxVisible: isToolboxVisible(state)
+        _toolboxVisible: isToolboxVisible(state),
     };
 }
 
-export default withSafeAreaInsets(connect(_mapStateToProps)(props => {
-    const dispatch = useDispatch();
+export default withSafeAreaInsets(
+    connect(_mapStateToProps)((props) => {
+        const dispatch = useDispatch();
 
-    useFocusEffect(useCallback(() => {
-        dispatch({ type: CONFERENCE_FOCUSED });
-        setPictureInPictureEnabled(true);
+        useFocusEffect(
+            useCallback(() => {
+                dispatch({ type: CONFERENCE_FOCUSED });
+                setPictureInPictureEnabled(true);
 
-        return () => {
-            dispatch({ type: CONFERENCE_BLURRED });
-            setPictureInPictureEnabled(false);
-        };
-    }, []));
+                return () => {
+                    dispatch({ type: CONFERENCE_BLURRED });
+                    setPictureInPictureEnabled(false);
+                };
+            }, [])
+        );
 
-    return ( // @ts-ignore
-        <Conference { ...props } />
-    );
-}));
+        return (
+            // @ts-ignore
+            <Conference {...props} />
+        );
+    })
+);
