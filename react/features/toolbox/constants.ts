@@ -1,4 +1,4 @@
-import { NativeToolbarButton, ToolbarButton } from './types';
+import { NativeToolbarButton, ToolbarButton } from "./types";
 
 /**
  * Dummy toolbar threschold value for 9 buttons. It is used as a placeholder in THRESHOLDS that would work only when
@@ -30,32 +30,53 @@ export const THRESHOLDS = [
     },
     {
         width: 565,
-        order: [ 'microphone', 'camera', 'desktop', 'chat', 'raisehand', 'reactions', 'participants-pane', 'tileview' ]
+        order: [
+            "microphone",
+            "camera",
+            "toggle-camera",
+            "stats",
+            "desktop",
+            "chat",
+            "raisehand",
+            "reactions",
+            "participants-pane",
+            "tileview",
+        ],
     },
     {
         width: 520,
-        order: [ 'microphone', 'camera', 'desktop', 'chat', 'raisehand', 'participants-pane', 'tileview' ]
+        order: [
+            "microphone",
+            "camera",
+            "toggle-camera",
+            "stats",
+            "desktop",
+            "chat",
+            "raisehand",
+            "participants-pane",
+            "tileview",
+        ],
     },
     {
         width: 470,
-        order: [ 'microphone', 'camera', 'desktop', 'chat', 'raisehand', 'participants-pane' ]
+        order: ["microphone", "camera", "toggle-camera", "stats", "desktop", "chat", "raisehand", "participants-pane"],
     },
     {
         width: 420,
-        order: [ 'microphone', 'camera', 'desktop', 'chat', 'participants-pane' ]
+        order: ["microphone", "camera", "toggle-camera", "stats", "desktop", "chat", "participants-pane"],
     },
     {
         width: 370,
-        order: [ 'microphone', 'camera', 'chat', 'participants-pane' ]
+        order: ["microphone", "camera", "toggle-camera", "stats", "chat", "participants-pane"],
     },
     {
         width: 225,
-        order: [ 'microphone', 'camera', 'chat' ]
+        order: ["microphone", "camera", "toggle-camera", "stats", "chat"],
     },
     {
         width: 200,
-        order: [ 'microphone', 'camera' ]
-    }
+        order: ["microphone", "camera", "toggle-camera", "stats"],
+    },
 ];
 
 /**
@@ -64,24 +85,47 @@ export const THRESHOLDS = [
 export const NATIVE_THRESHOLDS = [
     {
         width: 560,
-        order: [ 'microphone', 'camera', 'chat', 'screensharing', 'raisehand', 'tileview', 'overflowmenu', 'hangup' ]
+        order: [
+            "camera",
+
+            "microphone",
+            "toggle-camera",
+            "stats",
+            "chat",
+            "screensharing",
+            "raisehand",
+            "tileview",
+            "overflowmenu",
+            "hangup",
+        ],
     },
     {
         width: 500,
-        order: [ 'microphone', 'camera', 'chat', 'raisehand', 'tileview', 'overflowmenu', 'hangup' ]
+        order: [
+            "camera",
+
+            "microphone",
+            "toggle-camera",
+            "stats",
+            "chat",
+            "raisehand",
+            "tileview",
+            "overflowmenu",
+            "hangup",
+        ],
     },
     {
         width: 440,
-        order: [ 'microphone', 'camera', 'chat', 'raisehand', 'overflowmenu', 'hangup' ]
+        order: ["camera", "microphone", "toggle-camera", "stats", "chat", "raisehand", "overflowmenu", "hangup"],
     },
     {
         width: 380,
-        order: [ 'microphone', 'camera', 'chat', 'overflowmenu', 'hangup' ]
+        order: ["camera", "microphone", "toggle-camera", "stats", "chat", "overflowmenu", "hangup"],
     },
     {
         width: 320,
-        order: [ 'microphone', 'camera', 'overflowmenu', 'hangup' ]
-    }
+        order: ["camera", "microphone", "toggle-camera", "stats", "overflowmenu", "hangup"],
+    },
 ];
 
 /**
@@ -89,44 +133,44 @@ export const NATIVE_THRESHOLDS = [
  * buttons.
  */
 export const MAIN_TOOLBAR_BUTTONS_PRIORITY = [
-    'microphone',
-    'camera',
-    'desktop',
-    'chat',
-    'raisehand',
-    'reactions',
-    'participants-pane',
-    'tileview',
-    'overflowmenu',
-    'hangup',
-    'invite',
-    'toggle-camera',
-    'videoquality',
-    'fullscreen',
-    'security',
-    'closedcaptions',
-    'recording',
-    'livestreaming',
-    'linktosalesforce',
-    'sharedvideo',
-    'shareaudio',
-    'noisesuppression',
-    'whiteboard',
-    'etherpad',
-    'select-background',
-    'stats',
-    'settings',
-    'shortcuts',
-    'profile',
-    'embedmeeting',
-    'feedback',
-    'download',
-    'help'
+    "microphone",
+    "camera",
+    "desktop",
+    "chat",
+    "raisehand",
+    "reactions",
+    "participants-pane",
+    "tileview",
+    "overflowmenu",
+    "hangup",
+    "invite",
+    "toggle-camera",
+    "videoquality",
+    "fullscreen",
+    "security",
+    "closedcaptions",
+    "recording",
+    "livestreaming",
+    "linktosalesforce",
+    "sharedvideo",
+    "shareaudio",
+    "noisesuppression",
+    "whiteboard",
+    "etherpad",
+    "select-background",
+    "stats",
+    "settings",
+    "shortcuts",
+    "profile",
+    "embedmeeting",
+    "feedback",
+    "download",
+    "help",
 ];
 
 export const TOOLBAR_TIMEOUT = 4000;
 
-export const DRAWER_MAX_HEIGHT = '80dvh - 64px';
+export const DRAWER_MAX_HEIGHT = "80dvh - 64px";
 
 // Around 300 to be displayed above components like chat
 export const ZINDEX_DIALOG_PORTAL = 302;
@@ -134,7 +178,7 @@ export const ZINDEX_DIALOG_PORTAL = 302;
 /**
  * Color for spinner displayed in the toolbar.
  */
-export const SPINNER_COLOR = '#929292';
+export const SPINNER_COLOR = "#929292";
 
 /**
  * The list of all possible UI buttons.
@@ -143,41 +187,41 @@ export const SPINNER_COLOR = '#929292';
  * @type Array<string>
  */
 export const TOOLBAR_BUTTONS: ToolbarButton[] = [
-    'camera',
-    'chat',
-    'closedcaptions',
-    'desktop',
-    'download',
-    'embedmeeting',
-    'etherpad',
-    'feedback',
-    'filmstrip',
-    'fullscreen',
-    'hangup',
-    'help',
-    'highlight',
-    'invite',
-    'linktosalesforce',
-    'livestreaming',
-    'microphone',
-    'mute-everyone',
-    'mute-video-everyone',
-    'participants-pane',
-    'profile',
-    'raisehand',
-    'recording',
-    'security',
-    'select-background',
-    'settings',
-    'shareaudio',
-    'noisesuppression',
-    'sharedvideo',
-    'shortcuts',
-    'stats',
-    'tileview',
-    'toggle-camera',
-    'videoquality',
-    'whiteboard'
+    "camera",
+    "chat",
+    "closedcaptions",
+    "desktop",
+    "download",
+    "embedmeeting",
+    "etherpad",
+    "feedback",
+    "filmstrip",
+    "fullscreen",
+    "hangup",
+    "help",
+    "highlight",
+    "invite",
+    "linktosalesforce",
+    "livestreaming",
+    "microphone",
+    "mute-everyone",
+    "mute-video-everyone",
+    "participants-pane",
+    "profile",
+    "raisehand",
+    "recording",
+    "security",
+    "select-background",
+    "settings",
+    "shareaudio",
+    "noisesuppression",
+    "sharedvideo",
+    "shortcuts",
+    "stats",
+    "tileview",
+    "toggle-camera",
+    "videoquality",
+    "whiteboard",
 ];
 
 /**
@@ -187,27 +231,27 @@ export const TOOLBAR_BUTTONS: ToolbarButton[] = [
  * @type Array<string>
  */
 export const NATIVE_TOOLBAR_BUTTONS: NativeToolbarButton[] = [
-    'camera',
-    'chat',
-    'hangup',
-    'microphone',
-    'overflowmenu',
-    'raisehand',
-    'screensharing',
-    'tileview'
+    "camera",
+    "chat",
+    "hangup",
+    "microphone",
+    "overflowmenu",
+    "raisehand",
+    "screensharing",
+    "tileview",
 ];
 
 /**
  * The toolbar buttons to show when in visitors mode.
  */
 export const VISITORS_MODE_BUTTONS: ToolbarButton[] = [
-    'chat',
-    'closedcaptions',
-    'fullscreen',
-    'hangup',
-    'raisehand',
-    'settings',
-    'stats',
-    'tileview',
-    'videoquality'
+    "chat",
+    "closedcaptions",
+    "fullscreen",
+    "hangup",
+    "raisehand",
+    "settings",
+    "stats",
+    "tileview",
+    "videoquality",
 ];
