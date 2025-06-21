@@ -4,29 +4,28 @@ import { NativeToolbarButton, ToolbarButton } from "./types";
  * Dummy toolbar threschold value for 9 buttons. It is used as a placeholder in THRESHOLDS that would work only when
  * this value is overiden.
  */
-export const DUMMY_9_BUTTONS_THRESHOLD_VALUE = Symbol('9_BUTTONS_THRESHOLD_VALUE');
+export const DUMMY_9_BUTTONS_THRESHOLD_VALUE = Symbol("9_BUTTONS_THRESHOLD_VALUE");
 
 /**
  * Dummy toolbar threschold value for 10 buttons. It is used as a placeholder in THRESHOLDS that would work only when
  * this value is overiden.
  */
-export const DUMMY_10_BUTTONS_THRESHOLD_VALUE = Symbol('10_BUTTONS_THRESHOLD_VALUE');
+export const DUMMY_10_BUTTONS_THRESHOLD_VALUE = Symbol("10_BUTTONS_THRESHOLD_VALUE");
 
 /**
  * Thresholds for displaying toolbox buttons.
  */
 export const THRESHOLDS = [
-
     // This entry won't be used unless the order is overridden trough the mainToolbarButtons config prop.
     {
         width: 675,
-        order: DUMMY_10_BUTTONS_THRESHOLD_VALUE
+        order: DUMMY_10_BUTTONS_THRESHOLD_VALUE,
     },
 
     // This entry won't be used unless the order is overridden trough the mainToolbarButtons config prop.
     {
         width: 625,
-        order: DUMMY_9_BUTTONS_THRESHOLD_VALUE
+        order: DUMMY_9_BUTTONS_THRESHOLD_VALUE,
     },
     {
         width: 565,
@@ -34,7 +33,7 @@ export const THRESHOLDS = [
             "microphone",
             "camera",
             "toggle-camera",
-            "stats",
+            "speaker",
             "desktop",
             "chat",
             "raisehand",
@@ -49,7 +48,7 @@ export const THRESHOLDS = [
             "microphone",
             "camera",
             "toggle-camera",
-            "stats",
+            "speaker",
             "desktop",
             "chat",
             "raisehand",
@@ -59,23 +58,32 @@ export const THRESHOLDS = [
     },
     {
         width: 470,
-        order: ["microphone", "camera", "toggle-camera", "stats", "desktop", "chat", "raisehand", "participants-pane"],
+        order: [
+            "microphone",
+            "camera",
+            "toggle-camera",
+            "speaker",
+            "desktop",
+            "chat",
+            "raisehand",
+            "participants-pane",
+        ],
     },
     {
         width: 420,
-        order: ["microphone", "camera", "toggle-camera", "stats", "desktop", "chat", "participants-pane"],
+        order: ["microphone", "camera", "toggle-camera", "speaker", "desktop", "chat", "participants-pane"],
     },
     {
         width: 370,
-        order: ["microphone", "camera", "toggle-camera", "stats", "chat", "participants-pane"],
+        order: ["microphone", "camera", "toggle-camera", "speaker", "chat", "participants-pane"],
     },
     {
         width: 225,
-        order: ["microphone", "camera", "toggle-camera", "stats", "chat"],
+        order: ["microphone", "camera", "toggle-camera", "speaker", "chat"],
     },
     {
         width: 200,
-        order: ["microphone", "camera", "toggle-camera", "stats"],
+        order: ["microphone", "camera", "toggle-camera", "speaker"],
     },
 ];
 
@@ -87,10 +95,9 @@ export const NATIVE_THRESHOLDS = [
         width: 560,
         order: [
             "camera",
-
             "microphone",
             "toggle-camera",
-            "stats",
+            "speaker",
             "chat",
             "screensharing",
             "raisehand",
@@ -106,7 +113,7 @@ export const NATIVE_THRESHOLDS = [
 
             "microphone",
             "toggle-camera",
-            "stats",
+            "speaker",
             "chat",
             "raisehand",
             "tileview",
@@ -116,15 +123,15 @@ export const NATIVE_THRESHOLDS = [
     },
     {
         width: 440,
-        order: ["camera", "microphone", "toggle-camera", "stats", "chat", "raisehand", "overflowmenu", "hangup"],
+        order: ["camera", "microphone", "toggle-camera", "speaker", "chat", "raisehand", "overflowmenu", "hangup"],
     },
     {
         width: 380,
-        order: ["camera", "microphone", "toggle-camera", "stats", "chat", "overflowmenu", "hangup"],
+        order: ["camera", "microphone", "toggle-camera", "speaker", "chat", "overflowmenu", "hangup"],
     },
     {
         width: 320,
-        order: ["camera", "microphone", "toggle-camera", "stats", "overflowmenu", "hangup"],
+        order: ["camera", "microphone", "toggle-camera", "speaker", "overflowmenu", "hangup"],
     },
 ];
 
@@ -158,7 +165,7 @@ export const MAIN_TOOLBAR_BUTTONS_PRIORITY = [
     "whiteboard",
     "etherpad",
     "select-background",
-    "stats",
+    "speaker",
     "settings",
     "shortcuts",
     "profile",
@@ -217,7 +224,7 @@ export const TOOLBAR_BUTTONS: ToolbarButton[] = [
     "noisesuppression",
     "sharedvideo",
     "shortcuts",
-    "stats",
+    "speaker",
     "tileview",
     "toggle-camera",
     "videoquality",
@@ -251,7 +258,7 @@ export const VISITORS_MODE_BUTTONS: ToolbarButton[] = [
     "hangup",
     "raisehand",
     "settings",
-    "stats",
+    "speaker",
     "tileview",
     "videoquality",
 ];

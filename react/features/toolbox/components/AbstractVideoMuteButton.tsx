@@ -1,18 +1,17 @@
-import { IReduxState } from '../../app/types';
-import { VIDEO_MUTE_BUTTON_ENABLED } from '../../base/flags/constants';
-import { getFeatureFlag } from '../../base/flags/functions';
-import { MEDIA_TYPE } from '../../base/media/constants';
-import { IProps as AbstractButtonProps } from '../../base/toolbox/components/AbstractButton';
-import BaseVideoMuteButton from '../../base/toolbox/components/BaseVideoMuteButton';
-import { isLocalTrackMuted } from '../../base/tracks/functions';
-import { handleToggleVideoMuted } from '../actions.any';
-import { isVideoMuteButtonDisabled } from '../functions';
+import { IReduxState } from "../../app/types";
+import { VIDEO_MUTE_BUTTON_ENABLED } from "../../base/flags/constants";
+import { getFeatureFlag } from "../../base/flags/functions";
+import { MEDIA_TYPE } from "../../base/media/constants";
+import { IProps as AbstractButtonProps } from "../../base/toolbox/components/AbstractButton";
+import BaseVideoMuteButton from "../../base/toolbox/components/BaseVideoMuteButton";
+import { isLocalTrackMuted } from "../../base/tracks/functions";
+import { handleToggleVideoMuted } from "../actions.any";
+import { isVideoMuteButtonDisabled } from "../functions";
 
 /**
  * The type of the React {@code Component} props of {@link AbstractVideoMuteButton}.
  */
 export interface IProps extends AbstractButtonProps {
-
     /**
      * Whether video button is disabled or not.
      */
@@ -30,12 +29,12 @@ export interface IProps extends AbstractButtonProps {
  * @augments BaseVideoMuteButton
  */
 export default class AbstractVideoMuteButton<P extends IProps> extends BaseVideoMuteButton<P> {
-    override accessibilityLabel = 'toolbar.accessibilityLabel.videomute';
-    override toggledAccessibilityLabel = 'toolbar.accessibilityLabel.videounmute';
-    override label = 'toolbar.videomute';
-    override toggledLabel = 'toolbar.videounmute';
-    override tooltip = 'toolbar.videomute';
-    override toggledTooltip = 'toolbar.videounmute';
+    override accessibilityLabel = "toolbar.accessibilityLabel.videomute";
+    override toggledAccessibilityLabel = "toolbar.accessibilityLabel.videounmute";
+    override label = "toolbar.videomute";
+    override toggledLabel = "toolbar.videounmute";
+    override tooltip = "toolbar.videomute";
+    override toggledTooltip = "toolbar.videounmute";
 
     /**
      * Indicates if video is currently disabled or not.
@@ -83,12 +82,12 @@ export default class AbstractVideoMuteButton<P extends IProps> extends BaseVideo
  * }}
  */
 export function mapStateToProps(state: IReduxState) {
-    const tracks = state['features/base/tracks'];
+    const tracks = state["features/base/tracks"];
     const enabledFlag = getFeatureFlag(state, VIDEO_MUTE_BUTTON_ENABLED, true);
 
     return {
         _videoDisabled: isVideoMuteButtonDisabled(state),
         _videoMuted: isLocalTrackMuted(tracks, MEDIA_TYPE.VIDEO),
-        visible: enabledFlag
+        visible: enabledFlag,
     };
 }

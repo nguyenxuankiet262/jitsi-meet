@@ -53,6 +53,7 @@ export type ToolbarButton =
     | "stats"
     | "tileview"
     | "toggle-camera"
+    | "speaker"
     | "videoquality"
     | "whiteboard"
     | "__end";

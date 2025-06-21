@@ -5,12 +5,13 @@ import TileViewButton from "../video-layout/components/TileViewButton";
 import { iAmVisitor } from "../visitors/functions";
 
 import { IReduxState } from "../app/types";
-import SpeakerStatsButton from "../speaker-stats/components/native/SpeakerStatsButton";
+import ChatButton from "../chat/components/native/ChatButton";
 import AudioMuteButton from "./components/native/AudioMuteButton";
 import CustomOptionButton from "./components/native/CustomOptionButton";
 import HangupContainerButtons from "./components/native/HangupContainerButtons";
 import OverflowMenuButton from "./components/native/OverflowMenuButton";
 import ScreenSharingButton from "./components/native/ScreenSharingButton";
+import SpeakerToggleButton from "./components/native/SpeakerToggleButton.tsx";
 import ToggleCameraButton from "./components/native/ToggleCameraButton";
 import VideoMuteButton from "./components/native/VideoMuteButton";
 import { isDesktopShareButtonDisabled } from "./functions.native";
@@ -31,18 +32,18 @@ const camera = {
 const toggleCamera = {
     key: "toggle-camera",
     Content: ToggleCameraButton,
-    group: 1,
+    group: 0,
 };
 
 const speaker = {
-    key: "stats",
-    Content: SpeakerStatsButton,
-    group: 1,
+    key: "speaker",
+    Content: SpeakerToggleButton,
+    group: 0,
 };
 
 const chat = {
     key: "chat",
-    Content: ToggleCameraButton,
+    Content: ChatButton,
     group: 1,
 };
 
@@ -81,14 +82,6 @@ function getToggleCameraButton() {
 
     if (!_iAmVisitor) {
         return toggleCamera;
-    }
-}
-
-function getSpeakerButton() {
-    const _iAmVisitor = useSelector(iAmVisitor);
-
-    if (!_iAmVisitor) {
-        return speaker;
     }
 }
 
@@ -207,10 +200,22 @@ export function useNativeToolboxButtons(_customToolbarButtons?: ICustomToolbarBu
         }
     }
 
+    function getSpeakerButton() {
+        const { isSpeakerOn = true, devices = [] } = useSelector(
+            (state: IReduxState) => state["features/mobile/audio-mode"]
+        );
+        const hasMultipleDevices = devices.length >= 2;
+
+        return {
+            ...speaker,
+            enabled: !hasMultipleDevices || isSpeakerOn,
+        };
+    }
+
     const audioMuteButton = getAudioMuteButton();
     const videoMuteButton = getVideoMuteButton();
     const toggleCamera = getToggleCameraButton();
-    const speaker = getSpeakerButton();
+    const speakerButton = getSpeakerButton();
     const chatButton = getChatButton();
     const screenSharingButton = getScreenSharingButton();
     const tileViewButton = getTileViewButton();
@@ -221,8 +226,8 @@ export function useNativeToolboxButtons(_customToolbarButtons?: ICustomToolbarBu
         camera: videoMuteButton,
         // chat: chatButton,
         "toggle-camera": toggleCamera,
-        speaker: speaker,
-        screensharing: screenSharingButton,
+        speaker: speakerButton,
+        // screensharing: screenSharingButton,
         // raisehand,
         // tileview: tileViewButton,
         // overflowmenu: overflowMenuButton,

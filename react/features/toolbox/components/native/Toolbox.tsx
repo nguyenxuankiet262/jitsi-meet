@@ -63,7 +63,7 @@ function Toolbox(props: IProps) {
         allButtons,
         clientWidth,
         mainToolbarButtonsThresholds,
-        toolbarButtons,
+        toolbarButtons: [...toolbarButtons, "speaker"],
     });
 
     console.log("mainToolbarButtonsThresholds:", mainToolbarButtonsThresholds);
@@ -96,8 +96,11 @@ function Toolbox(props: IProps) {
                                 style={
                                     (key === "hangup"
                                         ? styles.hangupButton
-                                        : rest.enabled || rest.enabled === undefined
-                                        ? styles.circleButtonActive
+                                        : rest.enabled
+                                        ? {
+                                              ...styles.circleButton,
+                                              backgroundColor: "rgba(90, 217, 130, 0.8)",
+                                          }
                                         : styles.circleButton) as ViewStyle
                                 }
                             >

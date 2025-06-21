@@ -8,7 +8,7 @@
  *
  * @protected
  */
-export const _SET_AUDIOMODE_DEVICES = '_SET_AUDIOMODE_DEVICES';
+export const _SET_AUDIOMODE_DEVICES = "_SET_AUDIOMODE_DEVICES";
 
 /**
  * The type of redux action to set Audio Mode module's subscriptions.
@@ -20,4 +20,6 @@ export const _SET_AUDIOMODE_DEVICES = '_SET_AUDIOMODE_DEVICES';
  *
  * @protected
  */
-export const _SET_AUDIOMODE_SUBSCRIPTIONS = '_SET_AUDIOMODE_SUBSCRIPTIONS';
+export const _SET_AUDIOMODE_SUBSCRIPTIONS = "_SET_AUDIOMODE_SUBSCRIPTIONS";
+
+export const _SET_AUDIOMODE_IS_SPEAKER_ON = "_SET_AUDIOMODE_IS_SPEAKER_ON";

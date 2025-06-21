@@ -1,19 +1,22 @@
-import { VIDEO_MUTE, createToolbarEvent } from '../analytics/AnalyticsEvents';
-import { sendAnalytics } from '../analytics/functions';
-import { IStore } from '../app/types';
-import { setAudioOnly } from '../base/audio-only/actions';
-import { setVideoMuted } from '../base/media/actions';
-import { VIDEO_MUTISM_AUTHORITY } from '../base/media/constants';
+import { NativeModules } from "react-native";
+import { VIDEO_MUTE, createToolbarEvent } from "../analytics/AnalyticsEvents";
+import { sendAnalytics } from "../analytics/functions";
+import { IStore } from "../app/types";
+import { setAudioOnly } from "../base/audio-only/actions";
+import { setVideoMuted } from "../base/media/actions";
+import { VIDEO_MUTISM_AUTHORITY } from "../base/media/constants";
 
+import { _SET_AUDIOMODE_IS_SPEAKER_ON } from "../mobile/audio-mode/actionTypes";
 import {
     SET_MAIN_TOOLBAR_BUTTONS_THRESHOLDS,
     SET_TOOLBOX_ENABLED,
     SET_TOOLBOX_SHIFT_UP,
     SET_TOOLBOX_VISIBLE,
-    TOGGLE_TOOLBOX_VISIBLE
-} from './actionTypes';
-import { DUMMY_10_BUTTONS_THRESHOLD_VALUE, DUMMY_9_BUTTONS_THRESHOLD_VALUE } from './constants';
-import { IMainToolbarButtonThresholds, IMainToolbarButtonThresholdsUnfiltered } from './types';
+    TOGGLE_TOOLBOX_VISIBLE,
+} from "./actionTypes";
+import { DUMMY_10_BUTTONS_THRESHOLD_VALUE, DUMMY_9_BUTTONS_THRESHOLD_VALUE } from "./constants";
+import { IMainToolbarButtonThresholds, IMainToolbarButtonThresholdsUnfiltered } from "./types";
+const { AudioMode } = NativeModules;
 
 /**
  * Enables/disables the toolbox.
@@ -27,7 +30,7 @@ import { IMainToolbarButtonThresholds, IMainToolbarButtonThresholdsUnfiltered } 
 export function setToolboxEnabled(enabled: boolean) {
     return {
         type: SET_TOOLBOX_ENABLED,
-        enabled
+        enabled,
     };
 }
 
@@ -38,8 +41,8 @@ export function setToolboxEnabled(enabled: boolean) {
  * @returns {Function}
  */
 export function setToolboxVisible(visible: boolean) {
-    return (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
-        const { toolbarConfig } = getState()['features/base/config'];
+    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
+        const { toolbarConfig } = getState()["features/base/config"];
         const alwaysVisible = toolbarConfig?.alwaysVisible;
 
         if (!visible && alwaysVisible) {
@@ -48,7 +51,7 @@ export function setToolboxVisible(visible: boolean) {
 
         dispatch({
             type: SET_TOOLBOX_VISIBLE,
-            visible
+            visible,
         });
     };
 }
@@ -59,22 +62,49 @@ export function setToolboxVisible(visible: boolean) {
  * @returns {Function}
  */
 export function toggleToolboxVisible() {
-    return (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
+    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
         const state = getState();
-        const { toolbarConfig } = getState()['features/base/config'];
+        const { toolbarConfig } = getState()["features/base/config"];
         const alwaysVisible = toolbarConfig?.alwaysVisible;
-        const { visible } = state['features/toolbox'];
+        const { visible } = state["features/toolbox"];
 
         if (visible && alwaysVisible) {
             return;
         }
 
         dispatch({
-            type: TOGGLE_TOOLBOX_VISIBLE
+            type: TOGGLE_TOOLBOX_VISIBLE,
         });
     };
 }
 
+export function setAudioModeSpeaker(isSpeakerOn: boolean) {
+    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
+        const state = getState();
+
+        const devices = state["features/mobile/audio-mode"]?.devices ?? [];
+
+        console.log("[SpeakerToggle] Available audio devices:", devices);
+        if (devices.length < 2) {
+            console.warn("[SpeakerToggle] Only one audio device available. Skipping switch.");
+            return;
+        }
+
+        const targetType = isSpeakerOn ? "SPEAKER" : "EARPIECE";
+        const targetDevice = devices.find((d) => d.type === targetType);
+
+        if (targetDevice) {
+            console.log(`[SpeakerToggle] Switching to ${targetType} device:`, targetDevice);
+            AudioMode.setAudioDevice(targetDevice.uid || targetDevice.type);
+            dispatch({
+                type: _SET_AUDIOMODE_IS_SPEAKER_ON,
+                isSpeakerOn: isSpeakerOn,
+            });
+        } else {
+            console.warn(`[SpeakerToggle] Device not found: ${targetType}`);
+        }
+    };
+}
 
 /**
  * Action to handle toggle video from toolbox's video buttons.
@@ -86,26 +116,20 @@ export function toggleToolboxVisible() {
  * @returns {Function}
  */
 export function handleToggleVideoMuted(muted: boolean, showUI: boolean, ensureTrack: boolean) {
-    return (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
+    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
         const state = getState();
-        const { enabled: audioOnly } = state['features/base/audio-only'];
+        const { enabled: audioOnly } = state["features/base/audio-only"];
 
         sendAnalytics(createToolbarEvent(VIDEO_MUTE, { enable: muted }));
         if (audioOnly) {
             dispatch(setAudioOnly(false));
         }
 
-        dispatch(
-            setVideoMuted(
-                muted,
-                VIDEO_MUTISM_AUTHORITY.USER,
-                ensureTrack));
+        dispatch(setVideoMuted(muted, VIDEO_MUTISM_AUTHORITY.USER, ensureTrack));
 
         // FIXME: The old conference logic still relies on this event being
         // emitted.
-        typeof APP === 'undefined'
-            || APP.conference.muteVideo(muted, showUI);
-
+        typeof APP === "undefined" || APP.conference.muteVideo(muted, showUI);
     };
 }
 
@@ -118,7 +142,7 @@ export function handleToggleVideoMuted(muted: boolean, showUI: boolean, ensureTr
 export function setShiftUp(shiftUp: boolean) {
     return {
         type: SET_TOOLBOX_SHIFT_UP,
-        shiftUp
+        shiftUp,
     };
 }
 
@@ -129,8 +153,8 @@ export function setShiftUp(shiftUp: boolean) {
  * @returns {Function}
  */
 export function setMainToolbarThresholds(thresholds: IMainToolbarButtonThresholdsUnfiltered) {
-    return (dispatch: IStore['dispatch'], getState: IStore['getState']) => {
-        const { mainToolbarButtons } = getState()['features/base/config'];
+    return (dispatch: IStore["dispatch"], getState: IStore["getState"]) => {
+        const { mainToolbarButtons } = getState()["features/base/config"];
 
         if (!Array.isArray(mainToolbarButtons) || mainToolbarButtons.length === 0) {
             return;
@@ -141,7 +165,7 @@ export function setMainToolbarThresholds(thresholds: IMainToolbarButtonThreshold
         const mainToolbarButtonsLengthMap = new Map();
         let orderIsChanged = false;
 
-        mainToolbarButtons.forEach(buttons => {
+        mainToolbarButtons.forEach((buttons) => {
             if (!Array.isArray(buttons) || buttons.length === 0) {
                 return;
             }
@@ -158,7 +182,8 @@ export function setMainToolbarThresholds(thresholds: IMainToolbarButtonThreshold
                 numberOfButtons = 9;
             } else if (order === DUMMY_10_BUTTONS_THRESHOLD_VALUE) {
                 numberOfButtons = 10;
-            } else { // Unexpected value. Ignore it.
+            } else {
+                // Unexpected value. Ignore it.
                 return;
             }
 
@@ -175,14 +200,14 @@ export function setMainToolbarThresholds(thresholds: IMainToolbarButtonThreshold
 
             mainToolbarButtonsThresholds.push({
                 order: finalOrder,
-                width
+                width,
             });
         });
 
         if (orderIsChanged) {
             dispatch({
                 type: SET_MAIN_TOOLBAR_BUTTONS_THRESHOLDS,
-                mainToolbarButtonsThresholds
+                mainToolbarButtonsThresholds,
             });
         }
     };
