@@ -155,6 +155,8 @@ class Thumbnail extends PureComponent<IProps> {
         super(props);
 
         this._onClick = this._onClick.bind(this);
+        this._pinParticipant = this._pinParticipant.bind(this);
+
         this._onThumbnailLongPress = this._onThumbnailLongPress.bind(this);
         this.handleTrackStreamingStatusChanged = this.handleTrackStreamingStatusChanged.bind(this);
     }
@@ -170,8 +172,14 @@ class Thumbnail extends PureComponent<IProps> {
         if (tileView) {
             dispatch(toggleToolboxVisible());
         } else {
-            dispatch(pinParticipant(_pinned ? null : _participantId));
+            dispatch(pinParticipant(_participantId));
         }
+    }
+
+    _pinParticipant() {
+        const { _participantId, _pinned, dispatch } = this.props;
+
+        dispatch(pinParticipant(_participantId));
     }
 
     /**
@@ -381,6 +389,7 @@ class Thumbnail extends PureComponent<IProps> {
             <Container
                 onClick={this._onClick}
                 // onLongPress={this._onThumbnailLongPress}
+                onLongPress={this._pinParticipant}
                 style={
                     [
                         styles.thumbnail,

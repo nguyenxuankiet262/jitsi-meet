@@ -1,9 +1,9 @@
-import { BoxModel } from '../base/styles/components/styles/BoxModel';
+import { BoxModel } from "../base/styles/components/styles/BoxModel";
 
 /**
  * The size (height and width) of the small (not tile view) thumbnails.
  */
-export const SMALL_THUMBNAIL_SIZE = 80;
+export const SMALL_THUMBNAIL_SIZE = 120;
 
 /**
  * The height of the filmstrip in narrow aspect ratio, or width in wide.
@@ -86,10 +86,7 @@ export const DISPLAY_AVATAR = 1;
  * @type {Array<string>}
  * @constant
  */
-export const DISPLAY_MODE_TO_CLASS_NAME = [
-    'display-video',
-    'display-avatar-only'
-];
+export const DISPLAY_MODE_TO_CLASS_NAME = ["display-video", "display-avatar-only"];
 
 /**
  * The vertical margin of a tile.
@@ -111,7 +108,6 @@ export const TILE_HORIZONTAL_MARGIN = 4;
  * @type {number}
  */
 export const TILE_VERTICAL_CONTAINER_HORIZONTAL_MARGIN = 2;
-
 
 /**
  * The vertical margin of the tile grid container.
@@ -205,29 +201,29 @@ export const TILE_MARGIN = 10;
  * The types of thumbnails for filmstrip.
  */
 export const THUMBNAIL_TYPE = {
-    TILE: 'TILE',
-    VERTICAL: 'VERTICAL',
-    HORIZONTAL: 'HORIZONTAL'
+    TILE: "TILE",
+    VERTICAL: "VERTICAL",
+    HORIZONTAL: "HORIZONTAL",
 };
 
 /**
  * The popover position for the connection stats table.
  */
 export const STATS_POPOVER_POSITION = {
-    [THUMBNAIL_TYPE.TILE]: 'right-start',
-    [THUMBNAIL_TYPE.VERTICAL]: 'left-start',
-    [THUMBNAIL_TYPE.HORIZONTAL]: 'top-end'
+    [THUMBNAIL_TYPE.TILE]: "right-start",
+    [THUMBNAIL_TYPE.VERTICAL]: "left-start",
+    [THUMBNAIL_TYPE.HORIZONTAL]: "top-end",
 };
 
 /**
  * The tooltip position for the indicators on the thumbnail.
  */
 export const INDICATORS_TOOLTIP_POSITION: {
-    [x: string]: 'right' | 'left' | 'top';
+    [x: string]: "right" | "left" | "top";
 } = {
-    [THUMBNAIL_TYPE.TILE]: 'right',
-    [THUMBNAIL_TYPE.VERTICAL]: 'left',
-    [THUMBNAIL_TYPE.HORIZONTAL]: 'top'
+    [THUMBNAIL_TYPE.TILE]: "right",
+    [THUMBNAIL_TYPE.VERTICAL]: "left",
+    [THUMBNAIL_TYPE.HORIZONTAL]: "top",
 };
 
 /**
@@ -272,8 +268,11 @@ export const MIN_STAGE_VIEW_WIDTH = 800;
 /**
  * Horizontal margin used for the vertical filmstrip.
  */
-export const VERTICAL_VIEW_HORIZONTAL_MARGIN = VERTICAL_FILMSTRIP_MIN_HORIZONTAL_MARGIN
-    + SCROLL_SIZE + TILE_HORIZONTAL_MARGIN + STAGE_VIEW_THUMBNAIL_HORIZONTAL_BORDER;
+export const VERTICAL_VIEW_HORIZONTAL_MARGIN =
+    VERTICAL_FILMSTRIP_MIN_HORIZONTAL_MARGIN +
+    SCROLL_SIZE +
+    TILE_HORIZONTAL_MARGIN +
+    STAGE_VIEW_THUMBNAIL_HORIZONTAL_BORDER;
 
 /**
  * The time after which a participant should be removed from active participants.
@@ -284,9 +283,9 @@ export const ACTIVE_PARTICIPANT_TIMEOUT = 1000 * 60;
  * The types of filmstrip.
  */
 export const FILMSTRIP_TYPE = {
-    MAIN: 'main',
-    STAGE: 'stage',
-    SCREENSHARE: 'screenshare'
+    MAIN: "main",
+    STAGE: "stage",
+    SCREENSHARE: "screenshare",
 };
 
 /**

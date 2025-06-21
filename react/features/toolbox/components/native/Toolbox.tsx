@@ -63,7 +63,7 @@ function Toolbox(props: IProps) {
         allButtons,
         clientWidth,
         mainToolbarButtonsThresholds,
-        toolbarButtons: [...toolbarButtons, "speaker"],
+        toolbarButtons: [...toolbarButtons, "toggle-camera", "speaker"],
     });
 
     console.log("mainToolbarButtonsThresholds:", mainToolbarButtonsThresholds);

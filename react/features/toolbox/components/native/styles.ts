@@ -97,6 +97,7 @@ const styles = {
         justifyContent: "space-around",
         spacing: 16,
         width: "100%",
+        marginBottom: 16,
     },
 
     buttonContainer: {
@@ -107,7 +108,7 @@ const styles = {
         backgroundColor: "rgba(255, 255, 255, 0.3)",
         width: 56,
         height: 56,
-        borderRadius: 16,
+        borderRadius: 28,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -116,7 +117,7 @@ const styles = {
         backgroundColor: "rgba(90, 217, 130, 0.8)", // sáng rõ khi active
         width: 56,
         height: 56,
-        borderRadius: 16,
+        borderRadius: 28,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -125,7 +126,7 @@ const styles = {
         backgroundColor: "#ff4d4f", // đỏ
         width: 56,
         height: 56,
-        borderRadius: 16,
+        borderRadius: 28,
         justifyContent: "center",
         alignItems: "center",
     },

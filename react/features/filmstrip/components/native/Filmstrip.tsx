@@ -253,7 +253,7 @@ class Filmstrip extends PureComponent<IProps> {
         return (
             <SafeAreaView // @ts-ignore
                 edges={[bottomEdge && "bottom", "left", "right"].filter(Boolean)}
-                style={[filmstripStyle as ViewStyle, { marginBottom: 90 }]}
+                style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16, marginHorizontal: 16 }]}
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
                 <FlatList
