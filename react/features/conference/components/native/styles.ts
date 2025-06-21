@@ -32,6 +32,17 @@ const alwaysOnTitleBar = {
  * The styles of the feature conference.
  */
 export default {
+    gradientContainer: {
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
+        height: 120, // cao bao nhiêu tùy bạn
+        flexDirection: "column",
+    },
+    layer: {
+        flex: 1,
+        backgroundColor: "black",
+    },
     /**
      * {@code Conference} Style.
      */

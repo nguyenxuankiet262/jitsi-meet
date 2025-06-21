@@ -1,22 +1,18 @@
-import { IReduxState } from '../app/types';
-import { IStateful } from '../base/app/types';
-import { FILMSTRIP_ENABLED } from '../base/flags/constants';
-import { getFeatureFlag } from '../base/flags/functions';
-import {
-    getLocalParticipant,
-    getParticipantCountWithFake,
-    getPinnedParticipant
-} from '../base/participants/functions';
-import Platform from '../base/react/Platform.native';
-import { toState } from '../base/redux/functions';
-import { ASPECT_RATIO_NARROW } from '../base/responsive-ui/constants';
-import { getHideSelfView } from '../base/settings/functions.any';
-import conferenceStyles from '../conference/components/native/styles';
-import { shouldDisplayTileView } from '../video-layout/functions.native';
+import { IReduxState } from "../app/types";
+import { IStateful } from "../base/app/types";
+import { FILMSTRIP_ENABLED } from "../base/flags/constants";
+import { getFeatureFlag } from "../base/flags/functions";
+import { getLocalParticipant, getParticipantCountWithFake, getPinnedParticipant } from "../base/participants/functions";
+import Platform from "../base/react/Platform.native";
+import { toState } from "../base/redux/functions";
+import { ASPECT_RATIO_NARROW } from "../base/responsive-ui/constants";
+import { getHideSelfView } from "../base/settings/functions.any";
+import conferenceStyles from "../conference/components/native/styles";
+import { shouldDisplayTileView } from "../video-layout/functions.native";
 
-import styles from './components/native/styles';
+import styles from "./components/native/styles";
 
-export * from './functions.any';
+export * from "./functions.any";
 
 /**
  * Returns true if the filmstrip on mobile is visible, false otherwise.
@@ -30,6 +26,7 @@ export * from './functions.any';
  */
 export function isFilmstripVisible(stateful: IStateful) {
     const state = toState(stateful);
+    const { visible } = state["features/toolbox"];
 
     const enabled = getFeatureFlag(state, FILMSTRIP_ENABLED, true);
 
@@ -37,7 +34,7 @@ export function isFilmstripVisible(stateful: IStateful) {
         return false;
     }
 
-    return getParticipantCountWithFake(state) > 1;
+    return visible && getParticipantCountWithFake(state) > 1;
 }
 
 /**
@@ -49,7 +46,7 @@ export function isFilmstripVisible(stateful: IStateful) {
  * in the filmstrip, then {@code true}; otherwise, {@code false}.
  */
 export function shouldRemoteVideosBeVisible(state: IReduxState) {
-    if (state['features/invite'].calleeInfoVisible) {
+    if (state["features/invite"].calleeInfoVisible) {
         return false;
     }
 
@@ -58,18 +55,17 @@ export function shouldRemoteVideosBeVisible(state: IReduxState) {
     // in the filmstrip.
     const participantCount = getParticipantCountWithFake(state);
     const pinnedParticipant = getPinnedParticipant(state);
-    const { disable1On1Mode } = state['features/base/config'];
+    const { disable1On1Mode } = state["features/base/config"];
 
     return Boolean(
-        participantCount > 2
-
+        participantCount > 2 ||
             // Always show the filmstrip when there is another participant to
             // show and the local video is pinned. Note we are not taking the
             // toolbar visibility into account here (unlike web) because
             // showing / hiding views in quick succession on mobile is taxing.
-            || (participantCount > 1 && pinnedParticipant?.local)
-
-            || disable1On1Mode);
+            (participantCount > 1 && pinnedParticipant?.local) ||
+            disable1On1Mode
+    );
 }
 
 /**
@@ -119,7 +115,7 @@ export function getTileViewParticipantCount(stateful: IStateful) {
 export function getColumnCount(stateful: IStateful) {
     const state = toState(stateful);
     const participantCount = getTileViewParticipantCount(state);
-    const { aspectRatio } = state['features/base/responsive-ui'];
+    const { aspectRatio } = state["features/base/responsive-ui"];
 
     // For narrow view, tiles should stack on top of each other for a lonely
     // call and a 1:1 call. Otherwise tiles should be grouped into rows of
@@ -144,31 +140,31 @@ export function getColumnCount(stateful: IStateful) {
  */
 export function isFilmstripScrollVisible(state: IReduxState) {
     if (shouldDisplayTileView(state)) {
-        return state['features/filmstrip']?.tileViewDimensions?.hasScroll;
+        return state["features/filmstrip"]?.tileViewDimensions?.hasScroll;
     }
 
-    const { aspectRatio, clientWidth, clientHeight, safeAreaInsets = {} } = state['features/base/responsive-ui'];
+    const { aspectRatio, clientWidth, clientHeight, safeAreaInsets = {} } = state["features/base/responsive-ui"];
     const isNarrowAspectRatio = aspectRatio === ASPECT_RATIO_NARROW;
     const disableSelfView = getHideSelfView(state);
     const localParticipant = Boolean(getLocalParticipant(state));
     const localParticipantVisible = localParticipant && !disableSelfView;
-    const participantCount
-        = getParticipantCountWithFake(state)
-            - (localParticipant && (shouldDisplayLocalThumbnailSeparately() || disableSelfView) ? 1 : 0);
+    const participantCount =
+        getParticipantCountWithFake(state) -
+        (localParticipant && (shouldDisplayLocalThumbnailSeparately() || disableSelfView) ? 1 : 0);
     const { height: thumbnailHeight, width: thumbnailWidth, margin } = styles.thumbnail;
     const { height, width } = getFilmstripDimensions({
         aspectRatio,
         clientWidth,
         clientHeight,
         insets: safeAreaInsets,
-        localParticipantVisible
+        localParticipantVisible,
     });
 
     if (isNarrowAspectRatio) {
-        return width < (thumbnailWidth + (2 * margin)) * participantCount;
+        return width < (thumbnailWidth + 2 * margin) * participantCount;
     }
 
-    return height < (thumbnailHeight + (2 * margin)) * participantCount;
+    return height < (thumbnailHeight + 2 * margin) * participantCount;
 }
 
 /**
@@ -200,7 +196,6 @@ export function isStageFilmstripEnabled(_state: any) {
  */
 export function isTopPanelEnabled(_state: any) {
     return false;
-
 }
 
 /**
@@ -214,7 +209,7 @@ export function getFilmstripDimensions({
     clientWidth,
     clientHeight,
     insets = {},
-    localParticipantVisible = true
+    localParticipantVisible = true,
 }: {
     aspectRatio: Symbol;
     clientHeight: number;
@@ -236,18 +231,24 @@ export function getFilmstripDimensions({
             height,
             width:
                 (shouldDisplayLocalThumbnailSeparately() && localParticipantVisible
-                    ? clientWidth - width - (margin * 2) : clientWidth)
-                    - left - right - (styles.filmstripNarrow.margin * 2) - (conferenceBorder * 2)
-
+                    ? clientWidth - width - margin * 2
+                    : clientWidth) -
+                left -
+                right -
+                styles.filmstripNarrow.margin * 2 -
+                conferenceBorder * 2,
         };
     }
 
     return {
         height:
             (shouldDisplayLocalThumbnailSeparately() && localParticipantVisible
-                ? clientHeight - height - (margin * 2) : clientHeight)
-                - top - bottom - (conferenceBorder * 2),
-        width
+                ? clientHeight - height - margin * 2
+                : clientHeight) -
+            top -
+            bottom -
+            conferenceBorder * 2,
+        width,
     };
 }
 
@@ -274,7 +275,7 @@ export function shouldDisplayLocalThumbnailSeparately() {
     // indicators such as moderator, audio and video muted, etc. For now we
     // do not have much of a choice but to continue rendering LocalThumbnail
     // as any other remote Thumbnail on Android.
-    return Platform.OS !== 'android';
+    return Platform.OS !== "android";
 }
 
 /**
@@ -286,4 +287,3 @@ export function shouldDisplayLocalThumbnailSeparately() {
 export function getScreenshareFilmstripParticipantId(_state: any) {
     return undefined;
 }
-

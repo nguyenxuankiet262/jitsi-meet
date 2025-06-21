@@ -75,7 +75,7 @@ const reactionMenu = {
 const styles = {
     toolboxContainer: {
         position: "absolute",
-        bottom: 16,
+        bottom: 0,
         left: 0,
         right: 0,
         alignItems: "center",
@@ -87,14 +87,15 @@ const styles = {
         alignItems: "center",
         backgroundColor: "rgba(255,255,255,0.3)",
         paddingHorizontal: 24,
-        paddingVertical: 12,
+        paddingVertical: 0,
         borderRadius: 50,
     },
 
     buttonsRow: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
+        spacing: 16,
         width: "100%",
     },
 
@@ -106,7 +107,7 @@ const styles = {
         backgroundColor: "rgba(255, 255, 255, 0.3)",
         width: 56,
         height: 56,
-        borderRadius: 28,
+        borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -115,7 +116,7 @@ const styles = {
         backgroundColor: "rgba(90, 217, 130, 0.8)", // sáng rõ khi active
         width: 56,
         height: 56,
-        borderRadius: 28,
+        borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -124,7 +125,7 @@ const styles = {
         backgroundColor: "#ff4d4f", // đỏ
         width: 56,
         height: 56,
-        borderRadius: 28,
+        borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
     },

@@ -1,4 +1,4 @@
-import { IconVolumeUp } from "../../icons/svg"; // Tự tạo icon nếu chưa có
+import { IconVolumeUp, IconVolumeUpBlack } from "../../icons/svg";
 
 import AbstractButton, { IProps } from "./AbstractButton";
 
@@ -7,6 +7,7 @@ import AbstractButton, { IProps } from "./AbstractButton";
  */
 export default class BaseSpeakerToggleButton<P extends IProps, S = any> extends AbstractButton<P, S> {
     override icon = IconVolumeUp;
+    override toggledIcon = IconVolumeUpBlack;
 
     /**
      * Toggles the audio output device between speaker and earpiece/bluetooth.

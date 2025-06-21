@@ -1,5 +1,5 @@
-import BaseTheme from '../../../base/ui/components/BaseTheme.native';
-import { SMALL_THUMBNAIL_SIZE } from '../../constants';
+import BaseTheme from "../../../base/ui/components/BaseTheme.native";
+import { SMALL_THUMBNAIL_SIZE } from "../../constants";
 
 /**
  * Size for the Avatar.
@@ -7,34 +7,32 @@ import { SMALL_THUMBNAIL_SIZE } from '../../constants';
 export const AVATAR_SIZE = 50;
 
 const indicatorContainer = {
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
     borderRadius: BaseTheme.shape.borderRadius,
     height: 24,
     margin: 2,
-    padding: 2
+    padding: 2,
 };
-
 
 /**
  * The styles of the feature filmstrip.
  */
 export default {
-
     /**
      * The FlatList content container styles.
      */
     contentContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flex: 0
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 0,
     },
 
     /**
      * The display name container.
      */
     displayNameContainer: {
-        padding: 2
+        padding: 2,
     },
 
     /**
@@ -42,10 +40,10 @@ export default {
      * thumbnails in a row at the bottom of the screen.
      */
     filmstripNarrow: {
-        flexDirection: 'row',
+        flexDirection: "row",
         flexGrow: 0,
-        justifyContent: 'flex-end',
-        margin: 6
+        justifyContent: "flex-end",
+        margin: 6,
     },
 
     /**
@@ -57,11 +55,11 @@ export default {
      */
     filmstripWide: {
         bottom: BaseTheme.spacing[0],
-        flexDirection: 'column',
+        flexDirection: "column",
         flexGrow: 0,
-        position: 'absolute',
+        position: "absolute",
         right: BaseTheme.spacing[0],
-        top: BaseTheme.spacing[0]
+        top: BaseTheme.spacing[0],
     },
 
     /**
@@ -70,32 +68,32 @@ export default {
     flatListContainer: {
         flexGrow: 1,
         flexShrink: 1,
-        flex: 0
+        flex: 0,
     },
 
     /**
      * The styles for the FlatList component in stage view.
      */
     flatListStageView: {
-        flexGrow: 0
+        flexGrow: 0,
     },
 
     /**
      * The styles for the FlatList component in tile view.
      */
     flatListTileView: {
-        flex: 0
+        flex: 0,
     },
 
     /**
      * Container of the {@link LocalThumbnail}.
      */
     localThumbnail: {
-        alignContent: 'stretch',
-        alignSelf: 'stretch',
+        alignContent: "stretch",
+        alignSelf: "stretch",
         aspectRatio: 1,
         flexShrink: 0,
-        flexDirection: 'row'
+        flexDirection: "row",
     },
 
     /**
@@ -103,29 +101,29 @@ export default {
      * the avatar of the associated participant.
      */
     thumbnail: {
-        alignItems: 'stretch',
+        alignItems: "stretch",
         backgroundColor: BaseTheme.palette.ui02,
         borderColor: BaseTheme.palette.ui03,
         borderRadius: BaseTheme.shape.borderRadius,
-        borderStyle: 'solid',
+        borderStyle: "solid",
         borderWidth: 1,
         flex: 1,
         height: SMALL_THUMBNAIL_SIZE,
-        justifyContent: 'center',
+        justifyContent: "center",
         margin: 2,
         maxHeight: SMALL_THUMBNAIL_SIZE,
         maxWidth: SMALL_THUMBNAIL_SIZE,
-        overflow: 'hidden',
-        position: 'relative',
-        width: SMALL_THUMBNAIL_SIZE
+        overflow: "hidden",
+        position: "relative",
+        width: SMALL_THUMBNAIL_SIZE,
     },
 
     indicatorContainer: {
-        ...indicatorContainer
+        ...indicatorContainer,
     },
 
     screenShareIndicatorContainer: {
-        ...indicatorContainer
+        ...indicatorContainer,
     },
 
     /**
@@ -135,48 +133,48 @@ export default {
         ...indicatorContainer,
         bottom: 3,
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: "row",
         left: 3,
-        position: 'absolute',
-        maxWidth: '95%',
-        overflow: 'hidden',
-        padding: BaseTheme.spacing[0]
+        position: "absolute",
+        maxWidth: "95%",
+        overflow: "hidden",
+        padding: BaseTheme.spacing[0],
     },
 
     bottomIndicatorsContainer: {
-        flexDirection: 'row',
-        padding: BaseTheme.spacing[1]
+        flexDirection: "row",
+        padding: BaseTheme.spacing[1],
     },
 
     thumbnailTopLeftIndicatorContainer: {
         ...indicatorContainer,
-        backgroundColor: 'unset',
-        flexDirection: 'row',
-        position: 'absolute',
-        top: BaseTheme.spacing[1]
+        backgroundColor: "unset",
+        flexDirection: "row",
+        position: "absolute",
+        top: BaseTheme.spacing[1],
     },
 
     raisedHandIndicator: {
         ...indicatorContainer,
-        backgroundColor: BaseTheme.palette.warning02
+        backgroundColor: BaseTheme.palette.warning02,
     },
 
     raisedHandIcon: {
-        color: BaseTheme.palette.uiBackground
+        color: BaseTheme.palette.uiBackground,
     },
 
     thumbnailRaisedHand: {
         borderWidth: 2,
-        borderColor: BaseTheme.palette.warning02
+        borderColor: BaseTheme.palette.warning02,
     },
 
     thumbnailDominantSpeaker: {
         borderWidth: 2,
-        borderColor: BaseTheme.palette.action01Hover
+        borderColor: BaseTheme.palette.action01Hover,
     },
 
     thumbnailGif: {
         flexGrow: 1,
-        resizeMode: 'contain'
-    }
+        resizeMode: "contain",
+    },
 };

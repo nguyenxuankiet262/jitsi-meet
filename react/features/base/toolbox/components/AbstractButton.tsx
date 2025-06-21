@@ -1,16 +1,15 @@
-import React, { Component, ReactElement, ReactNode } from 'react';
-import { WithTranslation } from 'react-i18next';
-import { GestureResponderEvent } from 'react-native';
+import React, { Component, ReactElement, ReactNode } from "react";
+import { WithTranslation } from "react-i18next";
+import { GestureResponderEvent } from "react-native";
 
-import { IStore } from '../../../app/types';
-import { NOTIFY_CLICK_MODE } from '../../../toolbox/types';
-import { combineStyles } from '../../styles/functions.any';
+import { IStore } from "../../../app/types";
+import { NOTIFY_CLICK_MODE } from "../../../toolbox/types";
+import { combineStyles } from "../../styles/functions.any";
 
-import { Styles } from './AbstractToolboxItem';
-import ToolboxItem from './ToolboxItem';
+import { Styles } from "./AbstractToolboxItem";
+import ToolboxItem from "./ToolboxItem";
 
 export interface IProps extends WithTranslation {
-
     /**
      * Function to be called after the click handler has been processed.
      */
@@ -46,7 +45,7 @@ export interface IProps extends WithTranslation {
     /**
      * Redux dispatch function.
      */
-    dispatch: IStore['dispatch'];
+    dispatch: IStore["dispatch"];
 
     /**
      * External handler for click action.
@@ -95,13 +94,13 @@ export interface IProps extends WithTranslation {
  */
 export const defaultDisabledButtonStyles = {
     iconStyle: {
-        opacity: 0.5
+        opacity: 0.5,
     },
     labelStyle: {
-        opacity: 0.5
+        opacity: 0.5,
     },
     style: undefined,
-    underlayColor: undefined
+    underlayColor: undefined,
 };
 
 /**
@@ -114,8 +113,8 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
         showLabel: false,
         styles: undefined,
         toggledStyles: undefined,
-        tooltipPosition: 'top',
-        visible: true
+        tooltipPosition: "top",
+        visible: true,
     };
 
     /**
@@ -247,9 +246,7 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
      * @returns {string}
      */
     _getIcon() {
-        return (
-            this._isToggled() ? this.toggledIcon : this.icon
-        ) || this.icon;
+        return (this._isToggled() ? this.toggledIcon : this.icon) || this.icon;
     }
 
     /**
@@ -261,8 +258,7 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
      * @returns {string}
      */
     _getLabel() {
-        return (this._isToggled() ? this.toggledLabel : this.label)
-            || this.label;
+        return (this._isToggled() ? this.toggledLabel : this.label) || this.label;
     }
 
     /**
@@ -277,10 +273,9 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
      * @returns {string}
      */
     _getAccessibilityLabel() {
-        return (this._isToggled()
-            ? this.toggledAccessibilityLabel
-            : this.accessibilityLabel
-        ) || this.accessibilityLabel;
+        return (
+            (this._isToggled() ? this.toggledAccessibilityLabel : this.accessibilityLabel) || this.accessibilityLabel
+        );
     }
 
     /**
@@ -293,19 +288,14 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
      */
     _getStyles(): Styles | undefined {
         const { disabledStyles, styles, toggledStyles } = this.props;
-        const buttonStyles
-            = (this._isToggled() ? toggledStyles : styles) || styles;
+        const buttonStyles = (this._isToggled() ? toggledStyles : styles) || styles;
 
         if (this._isDisabled() && buttonStyles && disabledStyles) {
             return {
-                iconStyle: combineStyles(
-                    buttonStyles.iconStyle ?? {}, disabledStyles.iconStyle ?? {}),
-                labelStyle: combineStyles(
-                    buttonStyles.labelStyle ?? {}, disabledStyles.labelStyle ?? {}),
-                style: combineStyles(
-                    buttonStyles.style ?? {}, disabledStyles.style ?? {}),
-                underlayColor:
-                    disabledStyles.underlayColor || buttonStyles.underlayColor
+                iconStyle: combineStyles(buttonStyles.iconStyle ?? {}, disabledStyles.iconStyle ?? {}),
+                labelStyle: combineStyles(buttonStyles.labelStyle ?? {}, disabledStyles.labelStyle ?? {}),
+                style: combineStyles(buttonStyles.style ?? {}, disabledStyles.style ?? {}),
+                underlayColor: disabledStyles.underlayColor || buttonStyles.underlayColor,
             };
         }
 
@@ -319,9 +309,7 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
      * @returns {string}
      */
     _getTooltip() {
-        return (this._isToggled() ? this.toggledTooltip : this.tooltip)
-            || this.tooltip
-            || '';
+        return (this._isToggled() ? this.toggledTooltip : this.tooltip) || this.tooltip || "";
     }
 
     /**
@@ -357,10 +345,8 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
     _onClick(e?: React.MouseEvent | GestureResponderEvent) {
         const { afterClick, buttonKey, handleClick, notifyMode } = this.props;
 
-        if (typeof APP !== 'undefined' && notifyMode) {
-            APP.API.notifyToolbarButtonClicked(
-                buttonKey, notifyMode === NOTIFY_CLICK_MODE.PREVENT_AND_NOTIFY
-            );
+        if (typeof APP !== "undefined" && notifyMode) {
+            APP.API.notifyToolbarButtonClicked(buttonKey, notifyMode === NOTIFY_CLICK_MODE.PREVENT_AND_NOTIFY);
         }
 
         if (notifyMode !== NOTIFY_CLICK_MODE.PREVENT_AND_NOTIFY) {
@@ -394,15 +380,11 @@ export default class AbstractButton<P extends IProps, S = any> extends Component
             labelProps: this.labelProps,
             styles: this._getStyles(),
             toggled: this._isToggled(),
-            tooltip: this._getTooltip()
+            tooltip: this._getTooltip(),
         };
 
         return (
-            <ToolboxItem
-                disabled = { this._isDisabled() }
-                onClick = { this._onClick }
-                onKeyDown = { this._onKeyDown }
-                { ...props } />
+            <ToolboxItem disabled={this._isDisabled()} onClick={this._onClick} onKeyDown={this._onKeyDown} {...props} />
         );
     }
 }

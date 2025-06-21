@@ -99,7 +99,7 @@ function Toolbox(props: IProps) {
                                         : rest.enabled
                                         ? {
                                               ...styles.circleButton,
-                                              backgroundColor: "rgba(90, 217, 130, 0.8)",
+                                              backgroundColor: "rgba(255, 255, 255, 0.8)",
                                           }
                                         : styles.circleButton) as ViewStyle
                                 }

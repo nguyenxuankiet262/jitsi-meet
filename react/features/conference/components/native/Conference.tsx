@@ -15,9 +15,7 @@ import LoadingIndicator from "../../../base/react/components/native/LoadingIndic
 import TintedView from "../../../base/react/components/native/TintedView";
 import { ASPECT_RATIO_NARROW, ASPECT_RATIO_WIDE } from "../../../base/responsive-ui/constants";
 import { StyleType } from "../../../base/styles/functions.any";
-import TestConnectionInfo from "../../../base/testing/components/TestConnectionInfo";
 import { isCalendarEnabled } from "../../../calendar-sync/functions.native";
-import DisplayNameLabel from "../../../display-name/components/native/DisplayNameLabel";
 import BrandingImageBackground from "../../../dynamic-branding/components/native/BrandingImageBackground";
 import Filmstrip from "../../../filmstrip/components/native/Filmstrip";
 import TileView from "../../../filmstrip/components/native/TileView";
@@ -40,7 +38,6 @@ import { isConnecting } from "../functions.native";
 import AlwaysOnLabels from "./AlwaysOnLabels";
 import ExpandedLabelPopup from "./ExpandedLabelPopup";
 import LonelyMeetingExperience from "./LonelyMeetingExperience";
-import TitleBar from "./TitleBar";
 import { EXPANDED_LABEL_TIMEOUT } from "./constants";
 import styles from "./styles";
 
@@ -400,7 +397,7 @@ class Conference extends AbstractConference<IProps, State> {
                     {_shouldDisplayTileView ||
                         (_isDisplayNameVisible && (
                             <Container style={styles.displayNameContainer}>
-                                <DisplayNameLabel participantId={_largeVideoParticipantId} />
+                                {/* <DisplayNameLabel participantId={_largeVideoParticipantId} /> */}
                             </Container>
                         ))}
 
@@ -423,7 +420,7 @@ class Conference extends AbstractConference<IProps, State> {
                             : styles.titleBarSafeViewTransparent) as ViewStyle
                     }
                 >
-                    <TitleBar _createOnPress={this._createOnPress} />
+                    {/* <TitleBar _createOnPress={this._createOnPress} /> */}
                 </SafeAreaView>
                 <SafeAreaView
                     pointerEvents="box-none"
@@ -442,7 +439,7 @@ class Conference extends AbstractConference<IProps, State> {
                     </View>
                 </SafeAreaView>
 
-                <TestConnectionInfo />
+                {/* <TestConnectionInfo /> */}
 
                 {_shouldDisplayTileView && (
                     <>

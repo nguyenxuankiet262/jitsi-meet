@@ -1,34 +1,30 @@
-import React, { Component } from 'react';
-import { GestureResponderEvent, Text, TextStyle, View, ViewStyle } from 'react-native';
-import { connect } from 'react-redux';
+import { Component } from "react";
+import { GestureResponderEvent, Text, TextStyle, View, ViewStyle } from "react-native";
+import { connect } from "react-redux";
 
-import { IReduxState } from '../../../app/types';
-import {
-    isTrackStreamingStatusActive,
-    isTrackStreamingStatusInactive
-} from '../../../connection-indicator/functions';
-import SharedVideo from '../../../shared-video/components/native/SharedVideo';
-import { isSharedVideoEnabled } from '../../../shared-video/functions';
-import { IStateful } from '../../app/types';
-import Avatar from '../../avatar/components/Avatar';
-import { translate } from '../../i18n/functions';
-import VideoTrack from '../../media/components/native/VideoTrack';
-import { shouldRenderVideoTrack } from '../../media/functions';
-import Container from '../../react/components/native/Container';
-import { toState } from '../../redux/functions';
-import { StyleType } from '../../styles/functions.any';
-import TestHint from '../../testing/components/TestHint';
-import { getVideoTrackByParticipant } from '../../tracks/functions';
-import { ITrack } from '../../tracks/types';
-import { getParticipantById, getParticipantDisplayName, isSharedVideoParticipant } from '../functions';
+import { IReduxState } from "../../../app/types";
+import { isTrackStreamingStatusActive, isTrackStreamingStatusInactive } from "../../../connection-indicator/functions";
+import SharedVideo from "../../../shared-video/components/native/SharedVideo";
+import { isSharedVideoEnabled } from "../../../shared-video/functions";
+import { IStateful } from "../../app/types";
+import Avatar from "../../avatar/components/Avatar";
+import { translate } from "../../i18n/functions";
+import VideoTrack from "../../media/components/native/VideoTrack";
+import { shouldRenderVideoTrack } from "../../media/functions";
+import Container from "../../react/components/native/Container";
+import { toState } from "../../redux/functions";
+import { StyleType } from "../../styles/functions.any";
+import TestHint from "../../testing/components/TestHint";
+import { getVideoTrackByParticipant } from "../../tracks/functions";
+import { ITrack } from "../../tracks/types";
+import { getParticipantById, getParticipantDisplayName, isSharedVideoParticipant } from "../functions";
 
-import styles from './styles';
+import styles from "./styles";
 
 /**
  * The type of the React {@link Component} props of {@link ParticipantView}.
  */
 interface IProps {
-
     /**
      * Whether the connection is inactive or not.
      *
@@ -130,7 +126,6 @@ interface IProps {
  * @augments Component
  */
 class ParticipantView extends Component<IProps> {
-
     /**
      * Renders the inactive connection status label.
      *
@@ -138,25 +133,19 @@ class ParticipantView extends Component<IProps> {
      * @returns {ReactElement}
      */
     _renderInactiveConnectionInfo() {
-        const {
-            avatarSize,
-            _participantName: displayName,
-            t
-        } = this.props;
+        const { avatarSize, _participantName: displayName, t } = this.props;
 
         // XXX Consider splitting this component into 2: one for the large view
         // and one for the thumbnail. Some of these don't apply to both.
         const containerStyle = {
             ...styles.connectionInfoContainer,
-            width: avatarSize * 1.5
+            width: avatarSize * 1.5,
         };
 
         return (
-            <View
-                pointerEvents = 'box-none'
-                style = { containerStyle as ViewStyle }>
-                <Text style = { styles.connectionInfoText as TextStyle }>
-                    { t('connection.LOW_BANDWIDTH', { displayName }) }
+            <View pointerEvents="box-none" style={containerStyle as ViewStyle}>
+                <Text style={styles.connectionInfoText as TextStyle}>
+                    {t("connection.LOW_BANDWIDTH", { displayName })}
                 </Text>
             </View>
         );
@@ -176,49 +165,45 @@ class ParticipantView extends Component<IProps> {
             _sharedVideoEnabled,
             _videoTrack: videoTrack,
             disableVideo,
-            onPress
+            onPress,
         } = this.props;
 
-        const testHintId
-            = this.props.testHintId
-                ? this.props.testHintId
-                : `org.jitsi.meet.Participant#${this.props.participantId}`;
+        const testHintId = this.props.testHintId
+            ? this.props.testHintId
+            : `org.jitsi.meet.Participant#${this.props.participantId}`;
 
         const renderSharedVideo = _isSharedVideoParticipant && !disableVideo && _sharedVideoEnabled;
 
         return (
             <Container
-                onClick = { renderVideo || renderSharedVideo ? undefined : onPress }
-                style = {{
+                onClick={renderVideo || renderSharedVideo ? undefined : onPress}
+                style={{
                     ...styles.participantView,
-                    ...this.props.style
+                    ...this.props.style,
                 }}
-                touchFeedback = { false }>
+                touchFeedback={false}
+            >
+                <TestHint id={testHintId} onPress={renderSharedVideo ? undefined : onPress} value="" />
 
-                <TestHint
-                    id = { testHintId }
-                    onPress = { renderSharedVideo ? undefined : onPress }
-                    value = '' />
+                {renderSharedVideo && <SharedVideo />}
 
-                { renderSharedVideo && <SharedVideo /> }
+                {renderVideo && (
+                    <VideoTrack
+                        onPress={onPress}
+                        videoTrack={videoTrack}
+                        waitForVideoStarted={false}
+                        zOrder={this.props.zOrder}
+                        zoomEnabled={this.props.zoomEnabled}
+                    />
+                )}
 
-                { renderVideo
-                    && <VideoTrack
-                        onPress = { onPress }
-                        videoTrack = { videoTrack }
-                        waitForVideoStarted = { false }
-                        zOrder = { this.props.zOrder }
-                        zoomEnabled = { this.props.zoomEnabled } /> }
+                {!renderSharedVideo && !renderVideo && (
+                    <View style={styles.avatarContainer as ViewStyle}>
+                        <Avatar participantId={this.props.participantId} size={this.props.avatarSize} />
+                    </View>
+                )}
 
-                { !renderSharedVideo && !renderVideo
-                    && <View style = { styles.avatarContainer as ViewStyle }>
-                        <Avatar
-                            participantId = { this.props.participantId }
-                            size = { this.props.avatarSize } />
-                    </View> }
-
-                { _isConnectionInactive && this.props.useConnectivityInfoLabel
-                    && this._renderInactiveConnectionInfo() }
+                {_isConnectionInactive && this.props.useConnectivityInfoLabel && this._renderInactiveConnectionInfo()}
             </Container>
         );
     }
@@ -245,7 +230,7 @@ function _mapStateToProps(state: IReduxState, ownProps: any) {
         _participantName: getParticipantDisplayName(state, participantId),
         _renderVideo: shouldRenderParticipantVideo(state, participantId) && !disableVideo,
         _sharedVideoEnabled: isSharedVideoEnabled(state),
-        _videoTrack: videoTrack
+        _videoTrack: videoTrack,
     };
 }
 
@@ -282,17 +267,17 @@ function shouldRenderParticipantVideo(stateful: IStateful, id: string) {
     }
 
     /* Then check if audio-only mode is not active. */
-    const audioOnly = state['features/base/audio-only'].enabled;
+    const audioOnly = state["features/base/audio-only"].enabled;
 
     if (!audioOnly) {
         return true;
     }
 
     /* Last, check if the participant is sharing their screen and they are on stage. */
-    const remoteScreenShares = state['features/video-layout'].remoteScreenShares || [];
-    const largeVideoParticipantId = state['features/large-video'].participantId;
-    const participantIsInLargeVideoWithScreen
-        = participant.id === largeVideoParticipantId && remoteScreenShares.includes(participant.id);
+    const remoteScreenShares = state["features/video-layout"].remoteScreenShares || [];
+    const largeVideoParticipantId = state["features/large-video"].participantId;
+    const participantIsInLargeVideoWithScreen =
+        participant.id === largeVideoParticipantId && remoteScreenShares.includes(participant.id);
 
     return participantIsInLargeVideoWithScreen;
 }
