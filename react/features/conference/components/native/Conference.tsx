@@ -157,6 +157,8 @@ interface IProps extends AbstractProps {
      * Default prop for navigating between screen components(React Navigation).
      */
     navigation: any;
+
+    _remoteParticipantCount: number;
 }
 
 type State = {
@@ -525,7 +527,9 @@ class Conference extends AbstractConference<IProps, State> {
     }
 
     _renderHeader() {
-        const { _shouldDisplayTileView } = this.props;
+        const { _shouldDisplayTileView, _remoteParticipantCount } = this.props;
+
+        const isP2P = _remoteParticipantCount <= 1;
 
         return (
             <Animated.View
@@ -562,7 +566,7 @@ class Conference extends AbstractConference<IProps, State> {
                         >
                             <IconArrowDown />
                         </TouchableOpacity>
-                        {!_shouldDisplayTileView && <TileViewButton />}
+                        {!_shouldDisplayTileView && !isP2P && <TileViewButton />}
                     </View>
                 </LinearGradient>
             </Animated.View>
@@ -651,6 +655,8 @@ function _mapStateToProps(state: IReduxState, _ownProps: any) {
     const { backgroundColor } = state["features/dynamic-branding"];
     const { startCarMode } = state["features/base/settings"];
     const { enabled: audioOnlyEnabled } = state["features/base/audio-only"];
+    const { remoteParticipants } = state["features/filmstrip"];
+
     const brandingStyles = backgroundColor
         ? {
               backgroundColor,
@@ -674,6 +680,7 @@ function _mapStateToProps(state: IReduxState, _ownProps: any) {
         _showLobby: getIsLobbyVisible(state),
         _startCarMode: startCarMode,
         _toolboxVisible: isToolboxVisible(state),
+        _remoteParticipantCount: remoteParticipants.length,
     };
 }
 

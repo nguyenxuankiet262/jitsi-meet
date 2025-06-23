@@ -274,7 +274,11 @@ class Filmstrip extends PureComponent<IProps> {
         if (this._separateLocalThumbnail || _disableSelfView) {
             participants = _participants;
         } else if (isNarrowAspectRatio) {
-            participants = [..._participants, _localParticipantId];
+            if (_participants.length === 1) {
+                participants = [..._participants];
+            } else {
+                participants = [..._participants, _localParticipantId];
+            }
         } else {
             participants = [_localParticipantId, ..._participants];
         }
@@ -302,8 +306,10 @@ class Filmstrip extends PureComponent<IProps> {
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={[styles.flatListStageView, { paddingHorizontal: 4 }]}
+                    style={{ width: "100%" }}
                     viewabilityConfig={this._viewabilityConfig}
                     windowSize={2}
+                    inverted
                 />
                 {this._separateLocalThumbnail && isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
             </SafeAreaView>
