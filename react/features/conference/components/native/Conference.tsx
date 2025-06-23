@@ -46,8 +46,8 @@ import { AbstractConference, abstractMapStateToProps } from "../AbstractConferen
 import { isConnecting } from "../functions.native";
 
 import LinearGradient from "react-native-linear-gradient";
-import { leaveConference } from "../../../base/conference/actions";
-import { IconArrowBack } from "../../../base/icons/svg";
+import { IconArrowDown } from "../../../base/icons/svg";
+import { enterPictureInPicture } from "../../../mobile/picture-in-picture/actions";
 import AlwaysOnLabels from "./AlwaysOnLabels";
 import ExpandedLabelPopup from "./ExpandedLabelPopup";
 import LonelyMeetingExperience from "./LonelyMeetingExperience";
@@ -443,7 +443,7 @@ class Conference extends AbstractConference<IProps, State> {
                                     style={{ height: 100, width: "100%" }}
                                 >
                                     <TouchableOpacity
-                                        onPress={() => this.props.dispatch(leaveConference())}
+                                        onPress={() => this.props.dispatch(enterPictureInPicture())}
                                         style={{
                                             marginTop: 32,
                                             marginLeft: 16,
@@ -455,7 +455,7 @@ class Conference extends AbstractConference<IProps, State> {
                                             alignItems: "center",
                                         }}
                                     >
-                                        <IconArrowBack />
+                                        <IconArrowDown />
                                     </TouchableOpacity>
                                 </LinearGradient>
                             </Animated.View>
