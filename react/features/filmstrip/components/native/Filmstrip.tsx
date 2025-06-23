@@ -250,10 +250,12 @@ class Filmstrip extends PureComponent<IProps> {
             participants = [_localParticipantId, ..._participants];
         }
 
+        // const isPinMe =
+
         return (
             <SafeAreaView // @ts-ignore
                 edges={[bottomEdge && "bottom", "left", "right"].filter(Boolean)}
-                style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16, marginHorizontal: 16 }]}
+                style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16 }]}
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
                 <FlatList
@@ -269,7 +271,7 @@ class Filmstrip extends PureComponent<IProps> {
                     renderItem={this._renderThumbnail}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
-                    style={styles.flatListStageView}
+                    contentContainerStyle={[styles.flatListStageView, { paddingHorizontal: 4 }]}
                     viewabilityConfig={this._viewabilityConfig}
                     windowSize={2}
                 />

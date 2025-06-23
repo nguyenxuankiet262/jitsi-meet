@@ -393,10 +393,15 @@ class Thumbnail extends PureComponent<IProps> {
                 style={
                     [
                         styles.thumbnail,
+                        { borderColor: "#ffffff", borderWidth: 2, borderRadius: 16 } as ViewStyle,
                         styleOverrides,
                         _raisedHand && !_isVirtualScreenshare ? styles.thumbnailRaisedHand : null,
-                        _renderDominantSpeakerIndicator && !_isVirtualScreenshare
-                            ? styles.thumbnailDominantSpeaker
+                        // _renderDominantSpeakerIndicator && !_isVirtualScreenshare
+                        this.props._pinned ? styles.thumbnailDominantSpeaker : null,
+                        tileView
+                            ? {
+                                  margin: 4,
+                              }
                             : null,
                     ] as StyleType[]
                 }

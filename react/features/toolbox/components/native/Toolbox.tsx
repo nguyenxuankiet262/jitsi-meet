@@ -66,9 +66,6 @@ function Toolbox(props: IProps) {
         toolbarButtons: [...toolbarButtons, "toggle-camera", "speaker"],
     });
 
-    console.log("mainToolbarButtonsThresholds:", mainToolbarButtonsThresholds);
-    console.log("toolbarButtons:", toolbarButtons);
-
     const bottomEdge = Platform.OS === "ios" && _visible;
     const { buttonStylesBorderless, hangupButtonStyles } = _styles;
     const style = { ...styles.toolbox };
@@ -82,10 +79,6 @@ function Toolbox(props: IProps) {
         if (!mainMenuButtons?.length) {
             return;
         }
-
-        mainMenuButtons.forEach((button: IToolboxNativeButton) => {
-            console.log(`Toolbox button: ${button.key}, enabled: ${button.enabled}`);
-        });
 
         return (
             <View style={styles.buttonsRow as ViewStyle}>

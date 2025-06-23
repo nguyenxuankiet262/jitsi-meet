@@ -27,7 +27,6 @@ import { ASPECT_RATIO_NARROW, ASPECT_RATIO_WIDE } from "../../../base/responsive
 import { StyleType } from "../../../base/styles/functions.any";
 import { isCalendarEnabled } from "../../../calendar-sync/functions.native";
 import BrandingImageBackground from "../../../dynamic-branding/components/native/BrandingImageBackground";
-import Filmstrip from "../../../filmstrip/components/native/Filmstrip";
 import TileView from "../../../filmstrip/components/native/TileView";
 import { FILMSTRIP_SIZE } from "../../../filmstrip/constants";
 import { isFilmstripVisible } from "../../../filmstrip/functions.native";
@@ -47,7 +46,9 @@ import { isConnecting } from "../functions.native";
 
 import LinearGradient from "react-native-linear-gradient";
 import { IconArrowDown } from "../../../base/icons/svg";
+import Filmstrip from "../../../filmstrip/components/native/Filmstrip";
 import { enterPictureInPicture } from "../../../mobile/picture-in-picture/actions";
+import TileViewButton from "../../../video-layout/components/TileViewButton";
 import AlwaysOnLabels from "./AlwaysOnLabels";
 import ExpandedLabelPopup from "./ExpandedLabelPopup";
 import LonelyMeetingExperience from "./LonelyMeetingExperience";
@@ -429,36 +430,7 @@ class Conference extends AbstractConference<IProps, State> {
 
                     {_shouldDisplayTileView || (
                         <>
-                            <Animated.View
-                                style={{
-                                    opacity: this._toolboxAnim,
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                }}
-                            >
-                                <LinearGradient
-                                    colors={["rgba(0,0,0,0.8)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.1)", "transparent"]}
-                                    style={{ height: 100, width: "100%" }}
-                                >
-                                    <TouchableOpacity
-                                        onPress={() => this.props.dispatch(enterPictureInPicture())}
-                                        style={{
-                                            marginTop: 32,
-                                            marginLeft: 16,
-                                            backgroundColor: "rgba(255, 255, 255, 1)",
-                                            width: 36,
-                                            height: 36,
-                                            borderRadius: 28,
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                        }}
-                                    >
-                                        <IconArrowDown />
-                                    </TouchableOpacity>
-                                </LinearGradient>
-                            </Animated.View>
+                            {this._renderHeader()}
 
                             <Animated.View
                                 style={{
@@ -477,10 +449,16 @@ class Conference extends AbstractConference<IProps, State> {
                                     }}
                                 />
                             </Animated.View>
-
-                            <Filmstrip />
-                            {this._renderNotificationsContainer()}
-                            <Toolbox />
+                            <Animated.View
+                                style={{
+                                    opacity: this._toolboxAnim,
+                                    position: "absolute",
+                                }}
+                            >
+                                <Filmstrip />
+                                {this._renderNotificationsContainer()}
+                                {this._renderToolBox()}
+                            </Animated.View>
                         </>
                     )}
                 </View>
@@ -516,11 +494,69 @@ class Conference extends AbstractConference<IProps, State> {
 
                 {_shouldDisplayTileView && (
                     <>
+                        {this._renderHeader()}
                         {this._renderNotificationsContainer()}
-                        <Toolbox />
+                        {this._renderToolBox()}
                     </>
                 )}
             </>
+        );
+    }
+
+    _renderToolBox() {
+        return (
+            <Animated.View
+                style={{
+                    opacity: this._toolboxAnim,
+                }}
+            >
+                <Toolbox />
+            </Animated.View>
+        );
+    }
+
+    _renderHeader() {
+        const { _shouldDisplayTileView } = this.props;
+
+        return (
+            <Animated.View
+                style={{
+                    opacity: this._toolboxAnim,
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                }}
+            >
+                <LinearGradient
+                    colors={["rgba(0,0,0,0.8)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.1)", "transparent"]}
+                    style={{ height: 150, width: "100%" }}
+                >
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 32,
+                            marginHorizontal: 16,
+                        }}
+                    >
+                        <TouchableOpacity
+                            onPress={() => this.props.dispatch(enterPictureInPicture())}
+                            style={{
+                                backgroundColor: "rgba(255, 255, 255, 1)",
+                                width: 36,
+                                height: 36,
+                                borderRadius: 28,
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                        >
+                            <IconArrowDown />
+                        </TouchableOpacity>
+                        {!_shouldDisplayTileView && <TileViewButton />}
+                    </View>
+                </LinearGradient>
+            </Animated.View>
         );
     }
 
