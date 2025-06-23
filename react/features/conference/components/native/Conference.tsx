@@ -439,13 +439,7 @@ class Conference extends AbstractConference<IProps, State> {
                                 }}
                             >
                                 <LinearGradient
-                                    colors={[
-                                        "rgba(0,0,0,0.8)",
-                                        "rgba(0,0,0,0.6)",
-                                        "rgba(0,0,0,0.4)",
-                                        "rgba(0,0,0,0.2)",
-                                        "transparent",
-                                    ]}
+                                    colors={["rgba(0,0,0,0.8)", "rgba(0,0,0,0.4)", "rgba(0,0,0,0.1)", "transparent"]}
                                     style={{ height: 100, width: "100%" }}
                                 >
                                     <TouchableOpacity
@@ -453,7 +447,7 @@ class Conference extends AbstractConference<IProps, State> {
                                         style={{
                                             marginTop: 32,
                                             marginLeft: 16,
-                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                            backgroundColor: "rgba(255, 255, 255, 1)",
                                             width: 36,
                                             height: 36,
                                             borderRadius: 28,
@@ -476,7 +470,7 @@ class Conference extends AbstractConference<IProps, State> {
                                 }}
                             >
                                 <LinearGradient
-                                    colors={["transparent", "rgba(0,0,0,0.6)", "rgba(0,0,0,0.8)", "rgba(0,0,0,1)"]}
+                                    colors={["transparent", "rgba(0,0,0,0.2)", "rgba(0,0,0,0.4)", "rgba(0,0,0, 0.8)"]}
                                     style={{
                                         height: 160,
                                         width: "100%",
