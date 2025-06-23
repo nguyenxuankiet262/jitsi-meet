@@ -1,6 +1,16 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback } from "react";
-import { BackHandler, NativeModules, Platform, SafeAreaView, StatusBar, View, ViewStyle } from "react-native";
+import {
+    Animated,
+    BackHandler,
+    NativeModules,
+    Platform,
+    SafeAreaView,
+    StatusBar,
+    TouchableOpacity,
+    View,
+    ViewStyle,
+} from "react-native";
 import { EdgeInsets, withSafeAreaInsets } from "react-native-safe-area-context";
 import { connect, useDispatch } from "react-redux";
 
@@ -35,6 +45,9 @@ import type { AbstractProps } from "../AbstractConference";
 import { AbstractConference, abstractMapStateToProps } from "../AbstractConference";
 import { isConnecting } from "../functions.native";
 
+import LinearGradient from "react-native-linear-gradient";
+import { leaveConference } from "../../../base/conference/actions";
+import { IconArrowBack } from "../../../base/icons/svg";
 import AlwaysOnLabels from "./AlwaysOnLabels";
 import ExpandedLabelPopup from "./ExpandedLabelPopup";
 import LonelyMeetingExperience from "./LonelyMeetingExperience";
@@ -166,6 +179,8 @@ class Conference extends AbstractConference<IProps, State> {
      */
     _hardwareBackPressSubscription: any;
 
+    _toolboxAnim: Animated.Value;
+
     /**
      * Initializes a new Conference instance.
      *
@@ -186,6 +201,7 @@ class Conference extends AbstractConference<IProps, State> {
         this._onHardwareBackPress = this._onHardwareBackPress.bind(this);
         this._setToolboxVisible = this._setToolboxVisible.bind(this);
         this._createOnPress = this._createOnPress.bind(this);
+        this._toolboxAnim = new Animated.Value(this.props._toolboxVisible ? 1 : 0);
     }
 
     /**
@@ -226,6 +242,14 @@ class Conference extends AbstractConference<IProps, State> {
             }
 
             navigate(screen.conference.main);
+        }
+
+        if (prevProps._toolboxVisible !== this.props._toolboxVisible) {
+            Animated.timing(this._toolboxAnim, {
+                toValue: this.props._toolboxVisible ? 1 : 0,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
         }
     }
 
@@ -405,6 +429,61 @@ class Conference extends AbstractConference<IProps, State> {
 
                     {_shouldDisplayTileView || (
                         <>
+                            <Animated.View
+                                style={{
+                                    opacity: this._toolboxAnim,
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                }}
+                            >
+                                <LinearGradient
+                                    colors={[
+                                        "rgba(0,0,0,0.8)",
+                                        "rgba(0,0,0,0.6)",
+                                        "rgba(0,0,0,0.4)",
+                                        "rgba(0,0,0,0.2)",
+                                        "transparent",
+                                    ]}
+                                    style={{ height: 100, width: "100%" }}
+                                >
+                                    <TouchableOpacity
+                                        onPress={() => this.props.dispatch(leaveConference())}
+                                        style={{
+                                            marginTop: 32,
+                                            marginLeft: 16,
+                                            backgroundColor: "rgba(255, 255, 255, 0.5)",
+                                            width: 36,
+                                            height: 36,
+                                            borderRadius: 28,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <IconArrowBack />
+                                    </TouchableOpacity>
+                                </LinearGradient>
+                            </Animated.View>
+
+                            <Animated.View
+                                style={{
+                                    opacity: this._toolboxAnim,
+                                    position: "absolute",
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                }}
+                            >
+                                <LinearGradient
+                                    colors={["transparent", "rgba(0,0,0,0.6)", "rgba(0,0,0,0.8)", "rgba(0,0,0,1)"]}
+                                    style={{
+                                        height: 160,
+                                        width: "100%",
+                                    }}
+                                />
+                            </Animated.View>
+
                             <Filmstrip />
                             {this._renderNotificationsContainer()}
                             <Toolbox />

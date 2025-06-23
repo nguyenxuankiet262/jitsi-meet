@@ -109,6 +109,7 @@ class ReactInstanceManagerHolder {
             new com.zmxv.RNSound.RNSoundPackage(),
             new com.th3rdwave.safeareacontext.SafeAreaContextPackage(),
             new com.horcrux.svg.SvgPackage(),
+            new com.BV.LinearGradient.LinearGradientPackage(),
             new org.wonday.orientation.OrientationPackage(),
             new ReactPackageAdapter() {
                 @Override

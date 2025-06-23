@@ -90,6 +90,8 @@ dependencies {
     implementation project(':react-native-svg')
     implementation project(':react-native-video')
     implementation project(':react-native-webview')
+    implementation project(':react-native-linear-gradient')
+
 
     // Use `api` here so consumers can use WebRTCModuleOptions.
     api project(':react-native-webrtc')

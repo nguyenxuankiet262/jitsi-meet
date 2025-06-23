@@ -105,7 +105,7 @@ const styles = {
     },
 
     circleButton: {
-        backgroundColor: "rgba(255, 255, 255, 0.3)",
+        backgroundColor: "rgba(46, 56, 57, 1)",
         width: 56,
         height: 56,
         borderRadius: 28,
