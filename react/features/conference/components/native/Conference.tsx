@@ -453,9 +453,18 @@ class Conference extends AbstractConference<IProps, State> {
                                 style={{
                                     opacity: this._toolboxAnim,
                                     position: "absolute",
+                                    top: 80,
                                 }}
                             >
                                 <Filmstrip />
+                            </Animated.View>
+                            <Animated.View
+                                style={{
+                                    opacity: this._toolboxAnim,
+                                    position: "absolute",
+                                    width: "100%",
+                                }}
+                            >
                                 {this._renderNotificationsContainer()}
                                 {this._renderToolBox()}
                             </Animated.View>

@@ -1,4 +1,4 @@
-import { PureComponent } from "react";
+import React, { PureComponent } from "react";
 import { FlatList, ViewStyle, ViewToken } from "react-native";
 import { SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
@@ -43,6 +43,8 @@ interface IProps {
     _disableSelfView: boolean;
 
     _localParticipantId: string;
+
+    _pinnedParticipantId: string;
 
     /**
      * The participants in the conference.
@@ -93,6 +95,9 @@ class Filmstrip extends PureComponent<IProps> {
      *
      * @inheritdoc
      */
+
+    _flatListRef = React.createRef<FlatList<string>>();
+
     constructor(props: IProps) {
         super(props);
 
@@ -124,6 +129,10 @@ class Filmstrip extends PureComponent<IProps> {
         this._getItemLayout = this._getItemLayout.bind(this);
         this._onViewableItemsChanged = this._onViewableItemsChanged.bind(this);
         this._renderThumbnail = this._renderThumbnail.bind(this);
+    }
+
+    override componentDidMount() {
+        this._scrollToPinnedParticipant();
     }
 
     /**
@@ -215,6 +224,26 @@ class Filmstrip extends PureComponent<IProps> {
         return <Thumbnail key={item} participantID={item} />;
     }
 
+    _scrollToPinnedParticipant() {
+        const { _participants, _pinnedParticipantId, _localParticipantId } = this.props;
+
+        if (!_pinnedParticipantId) return;
+
+        const isPinningSelf = _pinnedParticipantId === _localParticipantId;
+
+        if (isPinningSelf) {
+            if (this._flatListRef.current) {
+                this._flatListRef.current.scrollToEnd({ animated: true });
+            }
+        } else {
+            const index = _participants.indexOf(_pinnedParticipantId);
+
+            if (index !== -1 && this._flatListRef.current) {
+                this._flatListRef.current.scrollToIndex({ index, animated: true });
+            }
+        }
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -259,6 +288,7 @@ class Filmstrip extends PureComponent<IProps> {
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
                 <FlatList
+                    ref={this._flatListRef}
                     bounces={false}
                     data={participants}
                     /* @ts-ignore */
@@ -303,6 +333,7 @@ function _mapStateToProps(state: IReduxState) {
         _participants: showRemoteVideos ? remoteParticipants : NO_REMOTE_VIDEOS,
         _toolboxVisible: isToolboxVisible(state),
         _visible: enabled && isFilmstripVisible(state),
+        _pinnedParticipantId: state["features/base/participants"].pinnedParticipant,
     };
 }
 

@@ -43,7 +43,7 @@ export default {
         flexDirection: "row",
         flexGrow: 0,
         justifyContent: "flex-end",
-        margin: 6,
+        margin: 0,
     },
 
     /**

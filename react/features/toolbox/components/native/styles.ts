@@ -97,7 +97,7 @@ const styles = {
         justifyContent: "space-around",
         spacing: 16,
         width: "100%",
-        marginBottom: 16,
+        marginBottom: 32,
     },
 
     buttonContainer: {

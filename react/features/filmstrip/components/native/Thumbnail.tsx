@@ -35,7 +35,6 @@ import { shouldDisplayTileView } from "../../../video-layout/functions.native";
 import { SQUARE_TILE_ASPECT_RATIO } from "../../constants";
 
 import AudioMutedIndicator from "./AudioMutedIndicator";
-import ModeratorIndicator from "./ModeratorIndicator";
 import PinnedIndicator from "./PinnedIndicator";
 import RaisedHandIndicator from "./RaisedHandIndicator";
 import ScreenShareIndicator from "./ScreenShareIndicator";
@@ -248,7 +247,7 @@ class Thumbnail extends PureComponent<IProps> {
                     <Container style={bottomIndicatorsContainerStyle as StyleType}>
                         {audioMuted && !_isVirtualScreenshare && <AudioMutedIndicator />}
                         {!tileView && _pinned && <PinnedIndicator />}
-                        {renderModeratorIndicator && !_isVirtualScreenshare && <ModeratorIndicator />}
+                        {/* {renderModeratorIndicator && !_isVirtualScreenshare && <ModeratorIndicator />} */}
                         {!tileView && (isScreenShare || _isVirtualScreenshare) && <ScreenShareIndicator />}
                     </Container>
                     {renderDisplayName && <DisplayNameLabel contained={true} participantId={participantId} />}
