@@ -246,12 +246,13 @@ class Filmstrip extends PureComponent<IProps> {
         }
     }
 
-    _onClick(_participantId: string) {
-        const { dispatch, _pinnedParticipantId, _localParticipantId } = this.props;
-        if (_participantId === _pinnedParticipantId) {
+    _onPin() {
+        const { dispatch, _participants, _localParticipantId } = this.props;
+
+        if (_participants.length === 0) {
             dispatch(pinParticipant(_localParticipantId));
         } else {
-            dispatch(pinParticipant(_participantId));
+            dispatch(pinParticipant(_participants[0]));
         }
     }
 
@@ -294,6 +295,8 @@ class Filmstrip extends PureComponent<IProps> {
             participants = [_localParticipantId, ..._participants];
         }
 
+        console.log(`participants: ${participants[0]}`);
+
         // const isPinMe =
 
         return (
@@ -303,7 +306,7 @@ class Filmstrip extends PureComponent<IProps> {
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
                 {participants.length === 1 ? (
-                    <DraggableParticipantView key="draggable" onClick={() => this._onClick(participants[0])}>
+                    <DraggableParticipantView key="draggable" onClick={() => this._onPin()}>
                         <Thumbnail key={participants[0]} participantID={participants[0]} disableOnClick={true} />
                     </DraggableParticipantView>
                 ) : (
