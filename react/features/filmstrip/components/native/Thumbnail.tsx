@@ -395,7 +395,13 @@ class Thumbnail extends PureComponent<IProps> {
                 style={
                     [
                         styles.thumbnail,
-                        { borderColor: "#ffffff", borderWidth: 2, borderRadius: 16 } as ViewStyle,
+                        {
+                            borderColor: "#ffffff",
+                            borderWidth: 2,
+                            borderRadius: 6,
+                            backgroundColor: "#ffffff",
+                            elevation: 10,
+                        } as ViewStyle,
                         styleOverrides,
                         _raisedHand && !_isVirtualScreenshare ? styles.thumbnailRaisedHand : null,
                         // _renderDominantSpeakerIndicator && !_isVirtualScreenshare
