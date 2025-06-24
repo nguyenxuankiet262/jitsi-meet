@@ -6,7 +6,6 @@ import { IReduxState, IStore } from "../../../app/types";
 import { JitsiTrackEvents } from "../../../base/lib-jitsi-meet";
 import { MEDIA_TYPE, VIDEO_TYPE } from "../../../base/media/constants";
 import { pinParticipant } from "../../../base/participants/actions";
-import ParticipantView from "../../../base/participants/components/ParticipantView.native";
 import { PARTICIPANT_ROLE } from "../../../base/participants/constants";
 import {
     getLocalParticipant,
@@ -34,6 +33,7 @@ import { toggleToolboxVisible } from "../../../toolbox/actions.native";
 import { shouldDisplayTileView } from "../../../video-layout/functions.native";
 import { SQUARE_TILE_ASPECT_RATIO } from "../../constants";
 
+import ParticipantView from "../../../base/participants/components/ParticipantView.native";
 import AudioMutedIndicator from "./AudioMutedIndicator";
 import PinnedIndicator from "./PinnedIndicator";
 import RaisedHandIndicator from "./RaisedHandIndicator";
@@ -138,6 +138,8 @@ interface IProps {
      * If true, it tells the thumbnail that it needs to behave differently. E.g. React differently to a single tap.
      */
     tileView?: boolean;
+
+    disableOnClick?: boolean;
 }
 
 /**
@@ -372,6 +374,7 @@ class Thumbnail extends PureComponent<IProps> {
             _renderDominantSpeakerIndicator,
             height,
             tileView,
+            disableOnClick,
         } = this.props;
         const styleOverrides = tileView
             ? {
@@ -386,9 +389,9 @@ class Thumbnail extends PureComponent<IProps> {
 
         return (
             <Container
-                onClick={this._onClick}
+                onClick={disableOnClick ? undefined : this._onClick}
                 // onLongPress={this._onThumbnailLongPress}
-                onLongPress={this._pinParticipant}
+                onLongPress={disableOnClick ? undefined : this._pinParticipant}
                 style={
                     [
                         styles.thumbnail,

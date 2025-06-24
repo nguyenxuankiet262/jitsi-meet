@@ -17,6 +17,8 @@ import {
     shouldRemoteVideosBeVisible,
 } from "../../functions.native";
 
+import { pinParticipant } from "../../../base/participants/actions";
+import DraggableParticipantView from "../../../base/participants/components/DraggableParticipantView";
 import LocalThumbnail from "./LocalThumbnail";
 import Thumbnail from "./Thumbnail";
 import styles from "./styles";
@@ -44,7 +46,7 @@ interface IProps {
 
     _localParticipantId: string;
 
-    _pinnedParticipantId: string;
+    _pinnedParticipantId: string | undefined;
 
     /**
      * The participants in the conference.
@@ -244,6 +246,15 @@ class Filmstrip extends PureComponent<IProps> {
         }
     }
 
+    _onClick(_participantId: string) {
+        const { dispatch, _pinnedParticipantId, _localParticipantId } = this.props;
+        if (_participantId === _pinnedParticipantId) {
+            dispatch(pinParticipant(_localParticipantId));
+        } else {
+            dispatch(pinParticipant(_participantId));
+        }
+    }
+
     /**
      * Implements React's {@link Component#render()}.
      *
@@ -291,26 +302,32 @@ class Filmstrip extends PureComponent<IProps> {
                 style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16 }]}
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
-                <FlatList
-                    ref={this._flatListRef}
-                    bounces={false}
-                    data={participants}
-                    /* @ts-ignore */
-                    getItemLayout={this._getItemLayout}
-                    horizontal={isNarrowAspectRatio}
-                    initialNumToRender={initialNumToRender}
-                    key={isNarrowAspectRatio ? "narrow" : "wide"}
-                    keyExtractor={this._keyExtractor}
-                    onViewableItemsChanged={this._onViewableItemsChanged}
-                    renderItem={this._renderThumbnail}
-                    showsHorizontalScrollIndicator={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={[styles.flatListStageView, { paddingHorizontal: 4 }]}
-                    style={{ width: "100%" }}
-                    viewabilityConfig={this._viewabilityConfig}
-                    windowSize={2}
-                    inverted
-                />
+                {participants.length === 1 ? (
+                    <DraggableParticipantView key="draggable" onClick={() => this._onClick(participants[0])}>
+                        <Thumbnail key={participants[0]} participantID={participants[0]} disableOnClick={true} />
+                    </DraggableParticipantView>
+                ) : (
+                    <FlatList
+                        ref={this._flatListRef}
+                        bounces={false}
+                        data={participants}
+                        /* @ts-ignore */
+                        getItemLayout={this._getItemLayout}
+                        horizontal={isNarrowAspectRatio}
+                        initialNumToRender={initialNumToRender}
+                        key={isNarrowAspectRatio ? "narrow" : "wide"}
+                        keyExtractor={this._keyExtractor}
+                        onViewableItemsChanged={this._onViewableItemsChanged}
+                        renderItem={this._renderThumbnail}
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={[styles.flatListStageView, { paddingHorizontal: 4 }]}
+                        style={{ width: "100%" }}
+                        viewabilityConfig={this._viewabilityConfig}
+                        windowSize={2}
+                        inverted
+                    />
+                )}
                 {this._separateLocalThumbnail && isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
             </SafeAreaView>
         );
