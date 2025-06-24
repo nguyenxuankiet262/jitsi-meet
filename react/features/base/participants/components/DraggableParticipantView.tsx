@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import { Animated, Dimensions, PanResponder, StyleSheet } from "react-native";
 import { SMALL_THUMBNAIL_SIZE } from "../../../filmstrip/constants";
 
@@ -15,15 +15,24 @@ const DraggableParticipantView = React.memo(({ children, onClick }: Props) => {
     const lastOffset = useRef({ x: 0, y: 0 });
 
     const screen = Dimensions.get("window");
-    const screenWidth = screen.width;
-    const screenHeight = screen.height;
     const thumbnailWidth = SMALL_THUMBNAIL_SIZE;
     const thumbnailHeight = (SMALL_THUMBNAIL_SIZE * 4) / 3;
     const marginLeft = 8;
-    const marginRight = 20;
+    const marginRight = 24;
     const marginTop = 0;
     const marginBottom = 200;
+
     const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
+
+    useEffect(() => {
+        console.log("DraggableParticipantView mounted");
+        const initialX = screen.width - thumbnailWidth - marginRight;
+        const initialY = marginTop;
+        lastOffset.current = { x: initialX, y: initialY };
+        pan.setOffset(lastOffset.current);
+        pan.setValue({ x: 0, y: 0 });
+    }, []);
+
     const panResponder = useRef(
         PanResponder.create({
             onStartShouldSetPanResponder: () => true,
@@ -64,35 +73,6 @@ const DraggableParticipantView = React.memo(({ children, onClick }: Props) => {
             },
         })
     ).current;
-    // const panResponder = useRef(
-    //     PanResponder.create({
-    //         onStartShouldSetPanResponder: () => true,
-
-    //         onPanResponderGrant: () => {
-    //             gestureStartTime.current = Date.now();
-    //             isDragging.current = false;
-
-    //             pan.extractOffset();
-    //         },
-
-    //         onPanResponderMove: (_, gestureState) => {
-    //             if (Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2) {
-    //                 isDragging.current = true;
-
-    //                 pan.setValue({ x: gestureState.dx, y: gestureState.dy });
-    //             }
-    //         },
-
-    //         onPanResponderRelease: (_, gestureState) => {
-    //             if (!isDragging.current && Math.abs(gestureState.dx) < 5 && Math.abs(gestureState.dy) < 5) {
-    //                 onClick?.();
-    //             }
-
-    //             pan.flattenOffset();
-    //             isDragging.current = false;
-    //         },
-    //     })
-    // ).current;
 
     return (
         <Animated.View
