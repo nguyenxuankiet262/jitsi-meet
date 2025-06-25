@@ -529,6 +529,7 @@ class Conference extends AbstractConference<IProps, State> {
                     top: 0,
                     left: 0,
                     right: 0,
+                    zIndex: 999,
                 }}
             >
                 <LinearGradient
