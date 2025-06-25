@@ -19,9 +19,8 @@ const DraggableParticipantView = React.memo(({ children, onClick }: Props) => {
     const thumbnailHeight = (SMALL_THUMBNAIL_SIZE * 4) / 3;
     const marginLeft = 8;
     const marginRight = 24;
-    const marginTop = Platform.OS === "ios" ? 48 : 0;
-    const marginBottom = 200 + (Platform.OS === "ios" ? 48 : 0);
-
+    const marginTop = 0;
+    const marginBottom = Platform.OS === "ios" ? 310 : 200;
     const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
     useEffect(() => {
