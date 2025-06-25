@@ -28,14 +28,14 @@ public protocol PiPViewCoordinatorDelegate: class {
 /// This object will also provide the drag and tap interactions of the view
 /// when is presented in Picture in Picture mode.
 public class PiPViewCoordinator {
-    
+
     public enum Position {
         case lowerRightCorner
         case upperRightCorner
         case lowerLeftCorner
         case upperLeftCorner
     }
-    
+
     /// Limits the boundaries of view position on screen when minimized
     public var dragBoundInsets: UIEdgeInsets = UIEdgeInsets(top: 25,
                                                             left: 5,
@@ -220,7 +220,7 @@ public class PiPViewCoordinator {
 
         // resize to suggested ratio and position to the bottom right
         let adjustedBounds = bounds.inset(by: dragBoundInsets)
-        let size = CGSize(width: 150, height: 150)
+        let size = CGSize(width: 200, height: 200 * 4 / 3) // 4:3 aspect ratio
         let origin = (dragController.currentPosition ?? initialPositionInSuperView).getOriginIn(bounds: adjustedBounds, size: size)
 
         return CGRect(x: origin.x, y: origin.y, width: size.width, height: size.height)
