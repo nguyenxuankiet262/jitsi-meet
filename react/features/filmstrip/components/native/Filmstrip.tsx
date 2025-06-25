@@ -295,17 +295,13 @@ class Filmstrip extends PureComponent<IProps> {
             participants = [_localParticipantId, ..._participants];
         }
 
-        console.log(`participants: ${participants[0]}`);
-
-        // const isPinMe =
-
         return (
             <SafeAreaView // @ts-ignore
                 edges={[bottomEdge && "bottom", "left", "right"].filter(Boolean)}
                 style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16 }]}
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
-                {participants.length === 1 ? (
+                {!participants[0] || participants.length === 1 ? (
                     <DraggableParticipantView key="draggable" onClick={() => this._onPin()}>
                         <Thumbnail key={participants[0]} participantID={participants[0]} disableOnClick={true} />
                     </DraggableParticipantView>
@@ -331,7 +327,7 @@ class Filmstrip extends PureComponent<IProps> {
                         inverted
                     />
                 )}
-                {this._separateLocalThumbnail && isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
+                {/* {this._separateLocalThumbnail && isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />} */}
             </SafeAreaView>
         );
     }
