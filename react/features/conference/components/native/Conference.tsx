@@ -478,16 +478,6 @@ class Conference extends AbstractConference<IProps, State> {
                     pointerEvents="box-none"
                     style={
                         (_toolboxVisible
-                            ? styles.titleBarSafeViewColor
-                            : styles.titleBarSafeViewTransparent) as ViewStyle
-                    }
-                >
-                    {/* <TitleBar _createOnPress={this._createOnPress} /> */}
-                </SafeAreaView>
-                <SafeAreaView
-                    pointerEvents="box-none"
-                    style={
-                        (_toolboxVisible
                             ? [styles.titleBarSafeViewTransparent, { top: this.props.insets.top + 50 }]
                             : styles.titleBarSafeViewTransparent) as ViewStyle
                     }
@@ -536,7 +526,7 @@ class Conference extends AbstractConference<IProps, State> {
                 style={{
                     opacity: this._toolboxAnim,
                     position: "absolute",
-                    top: Platform.OS === "ios" ? 48 : 0,
+                    top: 0,
                     left: 0,
                     right: 0,
                 }}
@@ -549,7 +539,7 @@ class Conference extends AbstractConference<IProps, State> {
                         style={{
                             flexDirection: "row",
                             justifyContent: "space-between",
-                            marginTop: 32,
+                            marginTop: 32 + this.props.insets.top,
                             marginHorizontal: 16,
                         }}
                     >

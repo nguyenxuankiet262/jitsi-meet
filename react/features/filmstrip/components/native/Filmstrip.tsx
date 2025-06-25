@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { FlatList, ViewStyle, ViewToken } from "react-native";
-import { SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
+import { EdgeInsets, SafeAreaView, withSafeAreaInsets } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 
 import { IReduxState, IStore } from "../../../app/types";
@@ -71,7 +71,7 @@ interface IProps {
     /**
      * Object containing the safe area insets.
      */
-    insets?: Object;
+    insets?: EdgeInsets;
 }
 
 /**
@@ -298,7 +298,7 @@ class Filmstrip extends PureComponent<IProps> {
         return (
             <SafeAreaView // @ts-ignore
                 edges={[bottomEdge && "bottom", "left", "right"].filter(Boolean)}
-                style={[filmstripStyle as ViewStyle, { marginBottom: 90 + 16 }]}
+                style={[filmstripStyle as ViewStyle, { marginTop: this.props.insets?.top || 0 }]}
             >
                 {this._separateLocalThumbnail && !isNarrowAspectRatio && !_disableSelfView && <LocalThumbnail />}
                 {!participants[0] || participants.length === 1 ? (
