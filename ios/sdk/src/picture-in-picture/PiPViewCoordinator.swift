@@ -124,6 +124,10 @@ public class PiPViewCoordinator {
         dragController.startDragListener(inView: view)
         dragController.insets = dragBoundInsets
 
+        // Add border radius
+        view.layer.cornerRadius = 12
+        view.layer.masksToBounds = true
+
         // add single tap gesture recognition for displaying exit PiP UI
         let exitSelector = #selector(toggleExitPiP)
         let tapGestureRecognizer = UITapGestureRecognizer(target: self,
@@ -220,7 +224,7 @@ public class PiPViewCoordinator {
 
         // resize to suggested ratio and position to the bottom right
         let adjustedBounds = bounds.inset(by: dragBoundInsets)
-        let size = CGSize(width: 200, height: 200 * 4 / 3) // 4:3 aspect ratio
+        let size = CGSize(width: 150, height: 150 * 4 / 3) // 4:3 aspect ratio
         let origin = (dragController.currentPosition ?? initialPositionInSuperView).getOriginIn(bounds: adjustedBounds, size: size)
 
         return CGRect(x: origin.x, y: origin.y, width: size.width, height: size.height)
