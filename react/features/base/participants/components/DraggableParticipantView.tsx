@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from "react";
-import { Animated, Dimensions, PanResponder, StyleSheet } from "react-native";
+import { Animated, Dimensions, PanResponder, Platform, StyleSheet } from "react-native";
 import { SMALL_THUMBNAIL_SIZE } from "../../../filmstrip/constants";
 
 interface Props {
@@ -19,8 +19,8 @@ const DraggableParticipantView = React.memo(({ children, onClick }: Props) => {
     const thumbnailHeight = (SMALL_THUMBNAIL_SIZE * 4) / 3;
     const marginLeft = 8;
     const marginRight = 24;
-    const marginTop = 0;
-    const marginBottom = 200;
+    const marginTop = Platform.OS === "ios" ? 48 : 0;
+    const marginBottom = 200 + (Platform.OS === "ios" ? 48 : 0);
 
     const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 

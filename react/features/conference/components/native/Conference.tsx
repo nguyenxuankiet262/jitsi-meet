@@ -536,7 +536,7 @@ class Conference extends AbstractConference<IProps, State> {
                 style={{
                     opacity: this._toolboxAnim,
                     position: "absolute",
-                    top: 0,
+                    top: Platform.OS === "ios" ? 48 : 0,
                     left: 0,
                     right: 0,
                 }}
