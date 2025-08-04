@@ -1,13 +1,11 @@
-import { IconMic, IconMicSlash } from '../../icons/svg';
+import { IconMic, IconMicSlash } from "../../icons/svg";
 
-import AbstractButton, { IProps } from './AbstractButton';
+import AbstractButton, { IProps } from "./AbstractButton";
 
 /**
  * An abstract implementation of a button for toggling audio mute.
  */
-export default class BaseAudioMuteButton<P extends IProps, S=any>
-    extends AbstractButton<P, S> {
-
+export default class BaseAudioMuteButton<P extends IProps, S = any> extends AbstractButton<P, S> {
     override icon = IconMic;
     override toggledIcon = IconMicSlash;
 

@@ -5,6 +5,8 @@ import TileViewButton from "../video-layout/components/TileViewButton";
 import { iAmVisitor } from "../visitors/functions";
 
 import { IReduxState } from "../app/types";
+import { MEDIA_TYPE } from "../base/media/constants.ts";
+import { isLocalTrackMuted } from "../base/tracks/functions.any.ts";
 import ChatButton from "../chat/components/native/ChatButton";
 import AudioMuteButton from "./components/native/AudioMuteButton";
 import CustomOptionButton from "./components/native/CustomOptionButton";
@@ -173,31 +175,26 @@ function getOverflowMenuButton() {
 export function useNativeToolboxButtons(_customToolbarButtons?: ICustomToolbarButton[]): {
     [key: string]: IToolboxNativeButton;
 } {
-    const audioMuted = useSelector((state: IReduxState) => state["features/base/media"].audio.muted);
-    const videoMuted = useSelector((state: IReduxState) => state["features/base/media"].video.muted);
-
     function getAudioMuteButton() {
-        const _iAmVisitor = useSelector(iAmVisitor);
-        const audioMuted = useSelector((state: IReduxState) => state["features/base/media"].audio.muted);
+        const _audioMuted = useSelector((state: IReduxState) =>
+            isLocalTrackMuted(state["features/base/tracks"], MEDIA_TYPE.AUDIO)
+        );
 
-        if (!_iAmVisitor) {
-            return {
-                ...microphone,
-                enabled: !audioMuted,
-            };
-        }
+        return {
+            ...microphone,
+            enabled: !_audioMuted,
+        };
     }
 
     function getVideoMuteButton() {
-        const _iAmVisitor = useSelector(iAmVisitor);
-        const videoMuted = useSelector((state: IReduxState) => state["features/base/media"].video.muted);
+        const _videoMuted = useSelector((state: IReduxState) =>
+            isLocalTrackMuted(state["features/base/tracks"], MEDIA_TYPE.VIDEO)
+        );
 
-        if (!_iAmVisitor) {
-            return {
-                ...camera,
-                enabled: !videoMuted,
-            };
-        }
+        return {
+            ...camera,
+            enabled: !_videoMuted,
+        };
     }
 
     function getSpeakerButton() {
