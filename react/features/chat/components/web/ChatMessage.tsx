@@ -5,7 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 
 import { IReduxState } from '../../../app/types';
 import { translate } from '../../../base/i18n/functions';
-import { getParticipantDisplayName } from '../../../base/participants/functions';
+import { getParticipantById, getParticipantDisplayName, isPrivateChatEnabled } from '../../../base/participants/functions';
 import Popover from '../../../base/popover/components/Popover.web';
 import Message from '../../../base/react/components/web/Message';
 import { withPixelLineHeight } from '../../../base/styles/functions.web';
@@ -224,11 +224,13 @@ const ChatMessage = ({
      * @returns {React$Element<*>}
      */
     function _renderDisplayName() {
+        const { displayName, isFromVisitor = false } = message;
+
         return (
             <div
                 aria-hidden = { true }
                 className = { cx('display-name', classes.displayName) }>
-                {message.displayName}
+                {`${displayName}${isFromVisitor ? ` ${t('visitors.chatIndicator')}` : ''}`}
             </div>
         );
     }
@@ -338,6 +340,8 @@ const ChatMessage = ({
                 {!shouldDisplayChatMessageMenu && (
                     <div className = { classes.optionsButtonContainer }>
                         {isHovered && <MessageMenu
+                            displayName = { message.displayName }
+                            isFromVisitor = { message.isFromVisitor }
                             isLobbyMessage = { message.lobbyChat }
                             message = { message.message }
                             participantId = { message.participantId }
@@ -391,6 +395,8 @@ const ChatMessage = ({
                         <div>
                             <div className = { classes.optionsButtonContainer }>
                                 {isHovered && <MessageMenu
+                                    displayName = { message.displayName }
+                                    isFromVisitor = { message.isFromVisitor }
                                     isLobbyMessage = { message.lobbyChat }
                                     message = { message.message }
                                     participantId = { message.participantId }
@@ -412,10 +418,20 @@ const ChatMessage = ({
  */
 function _mapStateToProps(state: IReduxState, { message }: IProps) {
     const { knocking } = state['features/lobby'];
-    const localParticipantId = state['features/base/participants'].local?.id;
+
+    const participant = getParticipantById(state, message.participantId);
+
+    // For visitor private messages, participant will be undefined but we should still allow private chat
+    // Create a visitor participant object for visitor messages to pass to isPrivateChatEnabled
+    const participantForCheck = message.isFromVisitor
+        ? { id: message.participantId, name: message.displayName, isVisitor: true as const }
+        : participant;
+
+    const enablePrivateChat = (!message.isFromVisitor || message.privateMessage)
+        && isPrivateChatEnabled(participantForCheck, state);
 
     return {
-        shouldDisplayChatMessageMenu: message.participantId !== localParticipantId,
+        shouldDisplayChatMessageMenu: enablePrivateChat,
         knocking,
         state
     };

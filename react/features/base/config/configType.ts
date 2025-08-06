@@ -67,27 +67,26 @@ export type NotifyClickButton =
           preventExecution: boolean;
       };
 
-export type Sounds =
-    | "ASKED_TO_UNMUTE_SOUND"
-    | "E2EE_OFF_SOUND"
-    | "E2EE_ON_SOUND"
-    | "INCOMING_MSG_SOUND"
-    | "KNOCKING_PARTICIPANT_SOUND"
-    | "LIVE_STREAMING_OFF_SOUND"
-    | "LIVE_STREAMING_ON_SOUND"
-    | "NO_AUDIO_SIGNAL_SOUND"
-    | "NOISY_AUDIO_INPUT_SOUND"
-    | "OUTGOING_CALL_EXPIRED_SOUND"
-    | "OUTGOING_CALL_REJECTED_SOUND"
-    | "OUTGOING_CALL_RINGING_SOUND"
-    | "OUTGOING_CALL_START_SOUND"
-    | "PARTICIPANT_JOINED_SOUND"
-    | "PARTICIPANT_LEFT_SOUND"
-    | "RAISE_HAND_SOUND"
-    | "REACTION_SOUND"
-    | "RECORDING_OFF_SOUND"
-    | "RECORDING_ON_SOUND"
-    | "TALK_WHILE_MUTED_SOUND";
+export type Sounds = 'ASKED_TO_UNMUTE_SOUND' |
+    'E2EE_OFF_SOUND' |
+    'E2EE_ON_SOUND' |
+    'INCOMING_MSG_SOUND' |
+    'KNOCKING_PARTICIPANT_SOUND' |
+    'LIVE_STREAMING_OFF_SOUND' |
+    'LIVE_STREAMING_ON_SOUND' |
+    'NO_AUDIO_SIGNAL_SOUND' |
+    'NOISY_AUDIO_INPUT_SOUND' |
+    'OUTGOING_CALL_EXPIRED_SOUND' |
+    'OUTGOING_CALL_REJECTED_SOUND' |
+    'OUTGOING_CALL_RINGING_SOUND' |
+    'OUTGOING_CALL_START_SOUND' |
+    'PARTICIPANT_JOINED_SOUND' |
+    'PARTICIPANT_LEFT_SOUND' |
+    'RAISE_HAND_SOUND' |
+    'REACTION_SOUND' |
+    'RECORDING_OFF_SOUND' |
+    'RECORDING_ON_SOUND' |
+    'TALK_WHILE_MUTED_SOUND';
 
 export interface IDeeplinkingPlatformConfig {
     appName: string;
@@ -175,7 +174,6 @@ export interface IConfig {
     _screenshotHistoryRegionUrl?: number;
     analytics?: {
         amplitudeAPPKey?: string;
-        amplitudeIncludeUTM?: boolean;
         blackListedEvents?: string[];
         disabled?: boolean;
         matomoEndpoint?: string;
@@ -387,12 +385,15 @@ export interface IConfig {
     fileSharing?: {
         apiUrl?: string;
         enabled?: boolean;
+        maxFileSize?: number;
     };
     filmstrip?: {
+        alwaysShowResizeBar?: boolean;
         disableResizable?: boolean;
         disableStageFilmstrip?: boolean;
         disableTopPanel?: boolean;
         disabled?: boolean;
+        initialWidth?: number;
         minParticipantCountForTopPanel?: number;
     };
     flags?: {
@@ -561,7 +562,7 @@ export interface IConfig {
         disableDemote?: boolean;
         disableGrantModerator?: boolean;
         disableKick?: boolean;
-        disablePrivateChat?: boolean;
+        disablePrivateChat?: 'all' | 'allow-moderator-chat' | 'disable-visitor-chat';
         disabled?: boolean;
     };
     replaceParticipant?: string;
@@ -603,6 +604,7 @@ export interface IConfig {
         failICE?: boolean;
         noAutoPlayVideo?: boolean;
         p2pTestMode?: boolean;
+        showSpotConsentDialog?: boolean;
         skipInterimTranscriptions?: boolean;
         testMode?: boolean;
     };
@@ -612,8 +614,9 @@ export interface IConfig {
     };
     tokenAuthUrl?: string;
     tokenAuthUrlAutoRedirect?: string;
+    tokenGetUserInfoOutOfContext?: boolean;
     tokenLogoutUrl?: string;
-    tokenRespectTenant?: string;
+    tokenRespectTenant?: boolean;
     toolbarButtons?: Array<ToolbarButton>;
     toolbarConfig?: {
         alwaysVisible?: boolean;
@@ -628,6 +631,7 @@ export interface IConfig {
         autoTranscribeOnRecord?: boolean;
         disableClosedCaptions?: boolean;
         enabled?: boolean;
+        inviteJigasiOnBackendTranscribing?: boolean;
         preferredLanguage?: string;
         translationLanguages?: Array<string>;
         translationLanguagesHead?: Array<string>;

@@ -1,7 +1,7 @@
-import React from "react";
-import { Image, View, ViewStyle } from "react-native";
-import { SvgCssUri } from "react-native-svg";
-import { connect } from "react-redux";
+import React from 'react';
+import { Image, View, ViewStyle } from 'react-native';
+import { SvgCssUri } from 'react-native-svg/css';
+import { connect } from 'react-redux';
 
 import { translate } from "../../../base/i18n/functions";
 import AbstractButton, { IProps as AbstractButtonProps } from "../../../base/toolbox/components/AbstractButton";
@@ -40,8 +40,14 @@ class CustomOptionButton extends AbstractButton<ICustomOptionButton> {
             return null;
         }
 
-        if (this.iconSrc?.includes("svg")) {
-            iconComponent = <SvgCssUri height={BaseTheme.spacing[4]} uri={this.iconSrc} width={BaseTheme.spacing[4]} />;
+        if (this.iconSrc?.includes('svg')) {
+            iconComponent = (
+                <SvgCssUri
+                    // @ts-ignore
+                    height = { BaseTheme.spacing[4] }
+                    uri = { this.iconSrc }
+                    width = { BaseTheme.spacing[4] } />
+            );
         } else {
             iconComponent = (
                 <Image
@@ -55,12 +61,10 @@ class CustomOptionButton extends AbstractButton<ICustomOptionButton> {
 
         return (
             <View
-                style={
-                    this.props.isToolboxButton &&
-                    ([styles.toolboxButtonIconContainer, { backgroundColor: this.backgroundColor }] as ViewStyle)
-                }
-            >
-                {/* {iconComponent} */}
+                style = { this.props.isToolboxButton && [
+                    styles.toolboxButtonIconContainer,
+                    { backgroundColor: this.backgroundColor } ] as ViewStyle[] }>
+                { iconComponent }
             </View>
         );
     };

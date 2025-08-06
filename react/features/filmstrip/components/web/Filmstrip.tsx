@@ -1,3 +1,4 @@
+import { Theme } from '@mui/material';
 import clsx from 'clsx';
 import { throttle } from 'lodash-es';
 import React, { PureComponent } from 'react';
@@ -13,6 +14,7 @@ import { isMobileBrowser } from '../../../base/environment/utils';
 import { translate } from '../../../base/i18n/functions';
 import Icon from '../../../base/icons/components/Icon';
 import { IconArrowDown, IconArrowUp } from '../../../base/icons/svg';
+import { isNarrowScreenWithChatOpen } from '../../../base/responsive-ui/functions';
 import { getHideSelfView } from '../../../base/settings/functions.any';
 import { registerShortcut, unregisterShortcut } from '../../../keyboard-shortcuts/actions';
 import { showToolbox } from '../../../toolbox/actions.web';
@@ -47,8 +49,6 @@ import {
 import AudioTracksContainer from './AudioTracksContainer';
 import Thumbnail from './Thumbnail';
 import ThumbnailWrapper from './ThumbnailWrapper';
-import { Theme } from '@mui/material';
-import { isNarrowScreenWithChatOpen } from '../../../base/responsive-ui/functions';
 
 
 const BACKGROUND_COLOR = 'rgba(51, 51, 51, .5)';
@@ -179,6 +179,9 @@ function styles(theme: Theme, props: IProps) {
 
             '&.top-panel-filmstrip': {
                 flexDirection: 'column' as const
+            },
+            '&.always-show-resize-bar': {
+                backgroundColor: BACKGROUND_COLOR
             }
         },
 
@@ -245,6 +248,10 @@ function styles(theme: Theme, props: IProps) {
  * The type of the React {@code Component} props of {@link Filmstrip}.
  */
 export interface IProps extends WithTranslation {
+    /**
+     * Whether to always show the resize bar on filmstrip. This will make the filmstrip always visible.
+     */
+    _alwaysShowResizeBar?: boolean;
 
     /**
      * Additional CSS class names top add to the root.
@@ -533,6 +540,7 @@ class Filmstrip extends PureComponent <IProps, IState> {
     override render() {
         const filmstripStyle: any = { };
         const {
+            _alwaysShowResizeBar,
             _currentLayout,
             _disableSelfView,
             _filmstripDisabled,
@@ -649,11 +657,12 @@ class Filmstrip extends PureComponent <IProps, IState> {
                 {_resizableFilmstrip
                     ? <div
                         className = { clsx('resizable-filmstrip', classes.resizableFilmstripContainer,
-                            _topPanelFilmstrip && 'top-panel-filmstrip') }>
+                            _topPanelFilmstrip && 'top-panel-filmstrip',
+                            _alwaysShowResizeBar && 'always-show-resize-bar') }>
                         <div
                             className = { clsx('dragHandleContainer',
                                 classes.dragHandleContainer,
-                                isMouseDown && 'visible',
+                                (isMouseDown || _alwaysShowResizeBar) && 'visible',
                                 _topPanelFilmstrip && 'top-panel')
                             }
                             onMouseDown = { this._onDragHandleMouseDown }>
@@ -1081,7 +1090,7 @@ class Filmstrip extends PureComponent <IProps, IState> {
 function _mapStateToProps(state: IReduxState, ownProps: any) {
     const { _hasScroll = false, filmstripType, _topPanelFilmstrip, _remoteParticipants } = ownProps;
     const { toolbarButtons } = state['features/toolbox'];
-    const { iAmRecorder } = state['features/base/config'];
+    const { iAmRecorder, filmstrip: { alwaysShowResizeBar } = {} } = state['features/base/config'];
     const { topPanelHeight, topPanelVisible, visible, width: verticalFilmstripWidth } = state['features/filmstrip'];
     const { localScreenShare } = state['features/base/participants'];
     const reduceHeight = state['features/toolbox'].visible && toolbarButtons?.length;
@@ -1134,7 +1143,8 @@ function _mapStateToProps(state: IReduxState, ownProps: any) {
         _topPanelVisible,
         _verticalFilmstripWidth: verticalFilmstripWidth.current,
         _verticalViewMaxWidth: getVerticalViewMaxWidth(state),
-        _videosClassName: videosClassName
+        _videosClassName: videosClassName,
+        _alwaysShowResizeBar: alwaysShowResizeBar
     };
 }
 

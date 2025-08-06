@@ -16,6 +16,7 @@ local new_id = require 'util.id'.medium;
 local filters = require 'util.filters';
 local array = require 'util.array';
 local set = require 'util.set';
+local json = require 'cjson.safe';
 
 local util = module:require 'util';
 local is_admin = util.is_admin;
@@ -27,6 +28,7 @@ local get_focus_occupant = util.get_focus_occupant;
 local internal_room_jid_match_rewrite = util.internal_room_jid_match_rewrite;
 local presence_check_status = util.presence_check_status;
 local respond_iq_result = util.respond_iq_result;
+local table_compare = util.table_compare;
 
 local PARTICIPANT_PROP_RAISE_HAND = 'jitsi_participant_raisedHand';
 local PARTICIPANT_PROP_REQUEST_TRANSCRIPTION = 'jitsi_participant_requestingTranscription';
@@ -528,12 +530,56 @@ module:hook('muc-occupant-groupchat', function(event)
     return true;
 end, 55); -- prosody check for visitor's chat is prio 50, we want to override it
 
+-- Private messaging support for visitors
 module:hook('muc-private-message', function(event)
-    -- private messaging is forbidden
-    event.origin.send(st.error_reply(event.stanza, 'auth', 'forbidden',
-            'Private messaging is disabled on visitor nodes'));
-    return true;
-end, 10);
+    local room, stanza = event.room, event.stanza;
+    local from = stanza.attr.from;
+    local to = stanza.attr.to;
+    local recipient_occupant = room:get_occupant_by_nick(to);
+    local recipient_domain = recipient_occupant and jid.host(recipient_occupant.bare_jid) or nil;
+    local sender_occupant = room:get_occupant_by_nick(from);
+    local sender_domain = sender_occupant and jid.host(sender_occupant.bare_jid) or nil;
+
+    if sender_domain == nil or recipient_domain == nil then
+        return false;
+    end
+
+    -- If both sender and recipient are local (on this vnode)
+    if sender_domain == local_domain and recipient_domain == local_domain then
+        event.origin.send(st.error_reply(event.stanza, 'auth', 'forbidden',
+            'Private messaging between visitors is disabled on visitor nodes'));
+        return false; -- Prevent sending the original message and stop further processing
+    end
+
+    -- If sender is local (visitor node) and recipient is from main prosody, forward to main prosody
+    if sender_domain == local_domain and recipient_domain == main_domain then
+        local original_to = stanza.attr.to;
+        local original_from = stanza.attr.from;
+
+        -- Add nick element for visitor identification
+        -- remove existing nick to avoid forgery
+        stanza:remove_children('nick', NICK_NS);
+        local nick_element = sender_occupant:get_presence():get_child('nick', NICK_NS);
+        if nick_element then
+            stanza:add_child(nick_element);
+        else
+            stanza:tag('nick', { xmlns = NICK_NS }):text('anonymous'):up();
+        end
+
+        -- Forward to main prosody, preserving the resource and original from
+        stanza.attr.to = jid.join(jid.node(room.jid), muc_domain_prefix..'.'..main_domain, jid.resource(to));
+        module:send(stanza);
+        return false; -- Prevent sending the original message and stop further processing
+    end
+
+    -- For main->visitor messages, let the default MUC handler process it
+    -- We don't need to do anything special
+    if sender_domain == main_domain and recipient_domain == local_domain then
+        return; -- Return nothing, let other handlers continue. The default MUC handler will process it.
+    end
+
+    return false; -- Prevent sending the original message and stop further processing
+end, 100); -- Lower priority to run after other handlers
 
 -- we calculate the stats on the configured interval (60 seconds by default)
 module:hook_global('stats-update', function ()
@@ -669,6 +715,29 @@ local function iq_from_main_handler(event)
                 and room.moderators_list:contains(jid.resource(o.nick)) then
                 room:set_affiliation(true, o.bare_jid, 'owner');
             end
+        end
+    end
+
+    local files = node:get_child('files');
+    if files then
+        local received_files = {};
+        for _, child in ipairs(files.tags) do
+            if child.name == 'file' then
+                received_files[child.attr.id] = json.decode(child:get_text());
+            end
+        end
+
+        -- fire events so file sharing component will add/remove files and will notify clients
+        local removed, added = table_compare(room.jitsi_shared_files or {}, received_files)
+        for _, id in ipairs(removed) do
+            module:context(local_domain):fire_event('jitsi-filesharing-remove', {
+                room = room; id = id;
+            });
+        end
+        for _, id in ipairs(added) do
+            module:context(local_domain):fire_event('jitsi-filesharing-add', {
+                room = room; file = received_files[id];
+            });
         end
     end
 

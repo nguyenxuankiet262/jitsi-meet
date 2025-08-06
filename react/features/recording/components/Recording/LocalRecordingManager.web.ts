@@ -4,12 +4,13 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { IStore } from '../../../app/types';
 import { getRoomName } from '../../../base/conference/functions';
-import { MEDIA_TYPE } from '../../../base/media/constants';
-import { getLocalTrack, getTrackState } from '../../../base/tracks/functions';
 import { isMobileBrowser } from '../../../base/environment/utils';
 import { browser } from '../../../base/lib-jitsi-meet';
+import { MEDIA_TYPE } from '../../../base/media/constants';
+import { getLocalTrack, getTrackState } from '../../../base/tracks/functions';
 import { isEmbedded } from '../../../base/util/embedUtils';
 import { stopLocalVideoRecording } from '../../actions.any';
+import logger from '../../logger';
 
 interface ISelfRecording {
     on: boolean;
@@ -251,7 +252,7 @@ const LocalRecordingManager: ILocalRecordingManager = {
         });
 
         this.recorder.addEventListener('dataavailable', async e => {
-            if (e.data && e.data.size > 0) {
+            if (this.recorder && e.data && e.data.size > 0) {
                 let data = e.data;
 
                 if (!this.firstChunk) {
@@ -281,11 +282,13 @@ const LocalRecordingManager: ILocalRecordingManager = {
 
             if (this.writableStream) {
                 try {
-                    await this.writableStream.seek(0);
-                    await this.writableStream.write(await fixDuration(this.firstChunk!, duration));
+                    if (this.firstChunk) {
+                        await this.writableStream.seek(0);
+                        await this.writableStream.write(await fixDuration(this.firstChunk!, duration));
+                    }
                     await this.writableStream.close();
-                } catch (_) {
-                    // Ignored, not much we can do here.
+                } catch (e) {
+                    logger.error('Error while writing to the local recording file', e);
                 } finally {
                     this.firstChunk = undefined;
                     this.fileHandle = undefined;
@@ -304,7 +307,7 @@ const LocalRecordingManager: ILocalRecordingManager = {
             });
         }
 
-        this.recorder.start(1000);
+        this.recorder.start(5000);
     },
 
     /**

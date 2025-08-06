@@ -27,6 +27,7 @@ import { ASPECT_RATIO_NARROW, ASPECT_RATIO_WIDE } from "../../../base/responsive
 import { StyleType } from "../../../base/styles/functions.any";
 import { isCalendarEnabled } from "../../../calendar-sync/functions.native";
 import BrandingImageBackground from "../../../dynamic-branding/components/native/BrandingImageBackground";
+import Filmstrip from '../../../filmstrip/components/native/Filmstrip';
 import TileView from "../../../filmstrip/components/native/TileView";
 import { FILMSTRIP_SIZE } from "../../../filmstrip/constants";
 import { isFilmstripVisible } from "../../../filmstrip/functions.native";
@@ -46,7 +47,6 @@ import { isConnecting } from "../functions.native";
 
 import LinearGradient from "react-native-linear-gradient";
 import { IconArrowDown } from "../../../base/icons/svg";
-import Filmstrip from "../../../filmstrip/components/native/Filmstrip";
 import { enterPictureInPicture } from "../../../mobile/picture-in-picture/actions";
 import TileViewButton from "../../../video-layout/components/TileViewButton";
 import AlwaysOnLabels from "./AlwaysOnLabels";

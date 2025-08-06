@@ -98,6 +98,7 @@ export interface IJitsiConference {
     end: Function;
     getBreakoutRooms: Function;
     getConnection: Function;
+    getFileSharing: Function;
     getLocalParticipantProperty: Function;
     getLocalTracks: Function;
     getMeetingUniqueId: Function;
@@ -107,6 +108,7 @@ export interface IJitsiConference {
     getParticipantCount: Function;
     getParticipants: Function;
     getRole: Function;
+    getShortTermCredentials: Function;
     getSpeakerStats: () => ISpeakerStats;
     getSsrcByTrack: Function;
     getTranscriptionStatus: Function;

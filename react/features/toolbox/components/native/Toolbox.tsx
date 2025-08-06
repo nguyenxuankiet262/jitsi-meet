@@ -62,6 +62,7 @@ function Toolbox(props: IProps) {
     const { mainMenuButtons } = getVisibleNativeButtons({
         allButtons,
         clientWidth,
+        iAmVisitor: _iAmVisitor,
         mainToolbarButtonsThresholds,
         toolbarButtons: [...toolbarButtons, "toggle-camera", "speaker"],
     });
